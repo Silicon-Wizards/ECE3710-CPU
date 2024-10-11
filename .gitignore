@@ -1,0 +1,8 @@
+# Quartus Generated Folders
+db/
+incremental_db/
+output_files/
+simulation/
+
+# Exclude Verilog Backup Files
+*.bak
