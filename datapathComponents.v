@@ -4,8 +4,9 @@
 // This file contains the definitions of various datapath components for use in the ECE3710-CPU project.
 //
 // Authors:  Kenneth Gordon, Adrian Sucahyo, Bryant Watson, and Inhyup Lee
-// Date:  October 13, 2024
+// Date:  October 14, 2024
 //
+
 module flopenr #(parameter WIDTH = 16)(
 	input                  clk, reset, enable,
    input      [WIDTH-1:0] dataIn, 

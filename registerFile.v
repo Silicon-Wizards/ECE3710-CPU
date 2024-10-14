@@ -5,12 +5,13 @@
 // (Or at least it will once we track down the bram.v file)
 //
 // Authors:  Kenneth Gordon, Adrian Sucahyo, Bryant Watson, and Inhyup Lee
-// Date:  October 13, 2024
+// Date:  October 14, 2024
 //
+
 module registerFile #(
 	parameter WIDTH = 16, 
-	ADDR_BITS = 4,
-	FILE_LOCATION = "FILL ME OUT!!"
+	parameter ADDR_BITS = 4,
+	parameter FILE_LOCATION = "FILL ME OUT!!"
 )(
 	input clk,
 	input writeEnable,
