@@ -46,3 +46,4 @@ module mux4 #(parameter WIDTH = 16)(
 		endcase
 	end
 endmodule // mux4
+
