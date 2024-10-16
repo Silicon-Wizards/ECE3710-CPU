@@ -11,7 +11,7 @@
 module cpu #(
 	parameter REG_WIDTH = 16,
 	parameter REG_ADDR_BITS = 4,
-	parameter FILE_LOCATION = "D:/Classwork/ECE 3710/Projects/ECE3710-CPU/reg.dat"
+	parameter FILE_LOCATION = "../reg.dat"
 )(
 	input clk
 );
