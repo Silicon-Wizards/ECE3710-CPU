@@ -2,7 +2,6 @@ module tb_alu;
 	//parameters
 	parameter WIDTH_DATA = 16;
 	parameter WIDTH_CONTROL = 4;
-	
 	parameter CONTROL_ADD =	'b0;
 	parameter CONTROL_SUB =	'b1;
 	parameter CONTROL_CMP =	'b10;
@@ -28,11 +27,11 @@ module tb_alu;
 	wire 									tb_carry_out;		//output reg carry_out, zero_out
 	wire 									tb_zero_out;		//output reg carry_out, zero_out
 
-	alu #(WIDTH_DATA, WIDTH_CONTROL) DUT(
-		.A(tb_A),
-		.B(tb_B),
-		.control_word(tb_control_word),
-		.carry_in(tb_carry_in)
+	alu DUT(
+	A(tb_A),
+	B(tb_B),
+	control_word(tb_control_word),
+	carry_in(tb_carry_in)
 	);
 	
 	initial begin
