@@ -5,7 +5,7 @@
 // necessary to synthesize the circuit onto the FPGA.
 //
 // Authors:  Kenneth Gordon, Adrian Sucahyo, Bryant Watson, and Inhyup Lee
-// Date:  October 14, 2024
+// Date:  October 17, 2024
 //
 
 module cpu #(
