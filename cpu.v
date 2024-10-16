@@ -11,7 +11,7 @@
 module cpu #(
 	parameter REG_WIDTH = 16,
 	parameter REG_ADDR_BITS = 4,
-	parameter FILE_LOCATION = "C:/Users/InHyup Lee/Desktop/Study/2024_3_Fall/ECE3710/Project/ECE3710-CPU/reg.dat"
+	parameter FILE_LOCATION = "../reg.dat"
 )(
 	input clk, reset,
 	output [REG_WIDTH-1:0] regALUoutput

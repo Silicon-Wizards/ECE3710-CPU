@@ -8,7 +8,7 @@ module alu #(
 	input [WIDTH_DATA - 1 : 0] A, B,
 	input [WIDTH_CONTROL - 1 : 0] control_word,
 	input carry_in,
-	output reg [WIDTH - 1] result,
+	output reg [WIDTH_DATA - 1 : 0] result,
 	output reg carry_out, zero_out
 );
 
@@ -52,10 +52,10 @@ module alu #(
 			CONTROL_LSH	: begin
 				if (B[WIDTH_DATA - 1] == 1'b1) begin
 					shift_wire <= (~B + 1);
-					result = A >> shift_wire;
+					result <= A >> shift_wire;
 				end else begin
 					shift_wire <= B;
-					result == A << shift_wire;
+					result <= A << shift_wire;
 				end
 				
 			end
