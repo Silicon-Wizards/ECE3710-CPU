@@ -1,4 +1,11 @@
-
+//
+// alu.v
+//
+// This module contains all the implementation for the ALU for use in the ECE3710-CPU project.
+//
+// Authors:  Kenneth Gordon, Adrian Sucahyo, Bryant Watson, and Inhyup Lee
+// Date:  October 15, 2024
+//
 
 
 module alu #(
