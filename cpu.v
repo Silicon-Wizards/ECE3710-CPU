@@ -23,4 +23,6 @@ module cpu #(
 	
 	// Instantiate the register file.
 	registerFile #(REG_WIDTH, REG_ADDR_BITS, FILE_LOCATION) registers(clk, regWriteEnable, regAddress1, regAddress2, regWriteData, regReadData1, regReadData2);
+	
+	alu();
 endmodule
