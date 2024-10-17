@@ -50,6 +50,7 @@ module cpu #(
 	
 	
 	
+	
 	wire mux_2Select;
 	wire [REG_WIDTH-1:0] mux_2Out; // change var name
 	
@@ -57,10 +58,20 @@ module cpu #(
 	
 	
 	
-	wire regALUEnable;
-	wire [REG_WIDTH-1:0] regALUIn 	// ALU output
+	wire [REG_WIDTH-1:0] aluControl
+	wire [REG_WIDTH-1:0] aluResult 	// ALU output
+	wire aluCarryOut, aluZeroOut
 	
-	flopenr #(REG_WIDTH) regALU(clk, reset, regALUEnable, regALUIn, regALUoutput);
+	alu #(REG_WIDTH, REG_ADDR_BITS) alu(mux_1Out, mux_2Out, aluControl, carry_in, aluResult, aluCarryOut, aluZeroOut)
+	
+	
+	
+	wire regALUEnable;
+	
+	flopenr #(REG_WIDTH) regALU(clk, reset, regALUEnable, aluResult, regALUoutput);
+	
+	
+
 	
 	
 endmodule
