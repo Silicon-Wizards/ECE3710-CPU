@@ -29,7 +29,7 @@ module alu #(
 	parameter CONTROL_XOR	=	'b111;
 	parameter CONTROL_LSH 	=	'b1000;
 	
-	reg [WIDTH_DATA - 1: 0] shift_wire; 
+	reg [WIDTH_DATA - 1: 0] shift_wire;
 	
 	always @(*) 
 		begin
@@ -44,17 +44,22 @@ module alu #(
 		
 		case (control_word)
 			CONTROL_ADD : begin
-				{carry_out, result} <= A + B + carry_in;
+				{result} <= A + B + carry_in;
+				over_out <= (A[WIDTH_DATA - 1] == B[WIDTH_DATA - 1] ? ((A[WIDTH_DATA - 1] ~= result[WIDTH_DATA - 1]) ? 1'b1 : 1'b0) : 1'b0);
 			end
 			CONTROL_ADDU : begin
-				{carry_out, result} <= A + B + carry_in;
-				over_out <= carry_out;
+				{carry_out, result} <= (A + B + carry_in);
 			end
 			CONTROL_SUB : begin
-				result <= A - B;
+				result <= (A - B);
+				over_out <= (A[WIDTH_DATA - 1] == B[WIDTH_DATA - 1] ? ((A[WIDTH_DATA - 1] ~= result[WIDTH_DATA - 1]) ? 1'b1 : 1'b0) : 1'b0);
+			end
+			CONTROL_SUBU : begin
+				{carry_out, result} <= (A - B);
 			end
 			CONTROL_CMP : begin
-				neg_out <= (B - A)[WIDTH_DATA - 1] == 'b1;
+				result <= (A - B);
+				neg_out <= (result)[WIDTH_DATA - 1] == 1'b1 ? 1'b1 : 1'b0;
 			end
 			CONTROL_AND : begin
 				result <= A & B;
@@ -78,7 +83,7 @@ module alu #(
 			default: begin result <= 0; end
 		endcase
 		
-		assign zero <= result == 0 ? 'b1 : 1'b0;
+		assign zero <= result == 1'b0 ? 'b1 : 1'b0;
 	end
 	
 endmodule
