@@ -35,7 +35,7 @@ module flopenr2 #(parameter BITS = 4)(
 		else if (enable)
 			dataOut <= dataIn;
 	end
-endmodule // flopenr2
+endmodule // flopenr2: for 4bit registers
 
 module mux2 #(parameter WIDTH = 16)(
 	input              select,
