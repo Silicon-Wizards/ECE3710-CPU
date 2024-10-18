@@ -22,21 +22,6 @@ module flopenr #(parameter WIDTH = 16)(
 	end
 endmodule // flopenr
 
-module flopenr2 #(parameter BITS = 4)(
-	input                  clk, reset, enable,
-   input      [BITS-1:0] dataIn, 
-   output reg [BITS-1:0] dataOut
-);
- 
-	// Create a register that is capable of being enabled and reset.
-   always @(posedge clk) begin
-		if (reset)
-			dataOut <= 0;
-		else if (enable)
-			dataOut <= dataIn;
-	end
-endmodule // flopenr2: for 4bit registers
-
 module mux2 #(parameter WIDTH = 16)(
 	input              select,
 	input  [WIDTH-1:0] dataA, dataB,
