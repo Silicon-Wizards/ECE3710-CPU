@@ -15,7 +15,7 @@ module flopenr #(parameter WIDTH = 16)(
  
 	// Create a register that is capable of being enabled and reset.
    always @(posedge clk) begin
-		if (reset)
+		if (~reset)
 			dataOut <= 0;
 		else if (enable)
 			dataOut <= dataIn;
