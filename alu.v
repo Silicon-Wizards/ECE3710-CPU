@@ -16,9 +16,10 @@ module alu #(
 	input [WIDTH_CONTROL - 1 : 0] control_word,
 	input carry_in,
 	output reg [WIDTH_DATA - 1 : 0] result,
-	output reg carry_out, low_out, over_out, zero_out, neg_out 
+	output reg carry_out, low_out, over_out, neg_out,
+	output zero_out
 );
-
+	
 	parameter CONTROL_ADD 	=	'b0;
 	parameter CONTROL_ADDU	=	'b1;
 	parameter CONTROL_SUB 	=	'b10;
@@ -36,7 +37,6 @@ module alu #(
 		// Set the default flags
 		carry_out <= 0;
 		low_out <= 0;
-		zero_out <= 0;
 		over_out <= 0;
 		neg_out <= 0;
 		
@@ -45,21 +45,21 @@ module alu #(
 		case (control_word)
 			CONTROL_ADD : begin
 				{result} <= A + B + carry_in;
-				over_out <= (A[WIDTH_DATA - 1] == B[WIDTH_DATA - 1] ? ((A[WIDTH_DATA - 1] ~= result[WIDTH_DATA - 1]) ? 1'b1 : 1'b0) : 1'b0);
+				over_out <= (A[WIDTH_DATA - 1] == B[WIDTH_DATA - 1] ? ((A[WIDTH_DATA - 1] != result[WIDTH_DATA - 1]) ? 1'b1 : 1'b0) : 1'b0);
 			end
 			CONTROL_ADDU : begin
 				{carry_out, result} <= (A + B + carry_in);
 			end
 			CONTROL_SUB : begin
 				result <= (A - B);
-				over_out <= (A[WIDTH_DATA - 1] == B[WIDTH_DATA - 1] ? ((A[WIDTH_DATA - 1] ~= result[WIDTH_DATA - 1]) ? 1'b1 : 1'b0) : 1'b0);
+				over_out <= (A[WIDTH_DATA - 1] == B[WIDTH_DATA - 1] ? ((A[WIDTH_DATA - 1] != result[WIDTH_DATA - 1]) ? 1'b1 : 1'b0) : 1'b0);
 			end
 			CONTROL_SUBU : begin
 				{carry_out, result} <= (A - B);
 			end
 			CONTROL_CMP : begin
 				result <= (A - B);
-				neg_out <= (result)[WIDTH_DATA - 1] == 1'b1 ? 1'b1 : 1'b0;
+				neg_out <= (result[WIDTH_DATA - 1] == 1'b1) ? 1'b1 : 1'b0;
 			end
 			CONTROL_AND : begin
 				result <= A & B;
@@ -80,10 +80,12 @@ module alu #(
 				end
 				
 			end
-			default: begin result <= 0; end
+			default : begin result <= 0; end
 		endcase
 		
-		assign zero <= result == 1'b0 ? 'b1 : 1'b0;
 	end
+	
+	// Zero Flag is a continuous assignment
+	assign zero_out = (result == 0) ? 1'b1 : 1'b0;
 	
 endmodule
