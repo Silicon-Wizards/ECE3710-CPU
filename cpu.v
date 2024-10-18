@@ -14,84 +14,72 @@ module cpu #(
 	parameter FILE_LOCATION = "../reg.dat"
 )(
 	input clk, reset,
+	input immediate,
 	input [4:0] aluControl,
-	input [REG_ADDR_BITS-1:0] address1, address2,
+	input [REG_ADDR_BITS-1:0] regAddressA, regAddressB,
 	
-	output [REG_WIDTH-1:0] regALUoutput,
+	output [REG_WIDTH-1:0] aluRegOutput,
 	output carry, low, flag, zero, negative,
 	output [6:0] sevenSeg1, sevenSeg2, sevenSeg3, sevenSeg4
 );
 
-	// Register datapath variables.
+	// Instantiate the source address register.
+	wire srcAddressRegEnable;
+	wire [REG_ADDR_BITS-1:0] srcAddressRegOutput;
+	flopenr #(REG_ADDR_BITS) srcAddressReg(clk, reset, srcAddressRegEnable, regAddressA, srcAddressRegOutput);
+
+	// Instantiate the destination address register.
+	wire dstAddressRegEnable;
+	wire [REG_ADDR_BITS-1:0] dstAddressRegOutput;
+	flopenr #(REG_ADDR_BITS) dstAddressReg(clk, reset, dstAddressRegEnable, regAddressB, dstAddressRegOutput); 
+
+	// Instantiate a register to hold an immediate value (currently unused).
+	wire immediateRegEnable;
+	wire [REG_WIDTH-1:0]	immediateRegOut;
+	flopenr #(REG_WIDTH) immediateReg(clk, reset, immediateRegEnable, immediate, immediateRegOut);
+	
+	// Instantiate the program counter (currently unused).
+	wire pcEnable;
+	wire [REG_WIDTH-1:0] pcOut;
+	flopenr #(REG_WIDTH) programCounter(clk, reset, pcEnable, aluOutput, pcOut);
+
+	// Instantiate the register file and connect it to the datapath.
 	wire regWriteEnable;
 	wire [REG_WIDTH-1:0] regReadData1, regReadData2;
-	
-	// Instantiate the register file.
-	registerFile #(REG_WIDTH, REG_ADDR_BITS, FILE_LOCATION) registers(clk, regWriteEnable, srcAddress, dstAddress, aluOutput, regReadData1, regReadData2);
-	
-	
+	registerFile #(REG_WIDTH, REG_ADDR_BITS, FILE_LOCATION) registers(clk, regWriteEnable, srcAddressRegOutput, dstAddressRegOutput, aluOutput, regReadData1, regReadData2);
 
-	wire progCountEnable;
-	wire [REG_WIDTH-1:0] pcIn;
-	wire [REG_WIDTH-1:0]	pcOut;
-	
-	flopenr #(REG_WIDTH) programCounter(clk, reset, progCountEnable, aluOutput, pcOut);
-	
-
-	
-	wire srcAddressEnable;
-	wire [REG_WIDTH-1:0] srcAddress;
-	
-	flopenr2 #(REG_WIDTH) srcAddressReg(clk, reset, srcAddressEnable, address1, srcAddress);
-	
-	
-	wire dstAddressEnable;
-	wire [REG_WIDTH-1:0] dstAddress;
-	
-	flopenr2 #(REG_WIDTH) dstAddressReg(clk, reset, dstAddressEnable, address2, dstAddress); 
-	
-
-	
-	wire immediateEnable;
-	wire [REG_WIDTH-1:0] immIn;
-	wire [REG_WIDTH-1:0]	immOut;
-	
-	flopenr #(REG_WIDTH) immediate(clk, reset, immediateEnable, immIn, immOut);
-	
-	
-	
-	wire mux_1Select;
+	// Instantiate a MUX for the ALU's A input.
+	wire aluInputAMuxSelect;
 	wire [REG_WIDTH-1:0] aluInputA;
+	mux2 #(REG_WIDTH) aluInputAMux(aluInputAMuxSelect, regReadData1, pcOut, aluInputA);
 	
-	mux2 #(REG_WIDTH) mux_1(mux_1Select, pcOut, regReadData1, aluInputA);
-	
-	
-	
-	
-	wire mux_2Select;
+	// Instantiate a MUX for the ALU's B input.
+	wire aluInputBMuxSelect;
 	wire [REG_WIDTH-1:0] aluInputB;
+	mux2 #(REG_WIDTH) aluInputBMux(aluInputBMuxSelect, regReadData2, immediateRegOut, aluInputB);
 	
-	mux2 #(REG_WIDTH) mux_2(mux_2Select, regReadData2, immOut, aluInputB);
-	
-	
-	
+	// Instantiate the ALU and connect it to the datapath.
 	wire [REG_WIDTH-1:0] aluOutput;
 	wire aluCarryIn, aluCarryOut, aluZeroOut;
-	
 	alu #(REG_WIDTH, REG_ADDR_BITS) alu(aluInputA, aluInputB, aluControl, aluCarryIn, aluOutput, aluCarryOut, aluZeroOut);
-	
-	
 		
-	wire regALUEnable;
+	// Instantiate a register to hold the ALU's output.
+	wire aluOutputRegEnable;
+	flopenr #(REG_WIDTH) aluOutputReg(clk, reset, aluOutputRegEnable, aluOutput, aluRegOutput);
 	
-	flopenr #(REG_WIDTH) regALU(clk, reset, regALUEnable, aluOutput, regALUoutput);
+	// Instantiate some hex-to-7-seg converters to display the result of the ALU.
+	hexTo7Seg sevenSegConverter1(aluRegOutput[3:0], sevenSeg1);
+	hexTo7Seg sevenSegConverter2(aluRegOutput[7:4], sevenSeg2);
+	hexTo7Seg sevenSegConverter3(aluRegOutput[11:8], sevenSeg3);
+	hexTo7Seg sevenSegConverter4(aluRegOutput[15:12], sevenSeg4);
 	
+	// Tie some of the enable signals of the registers to high as there is no master control unit to do so.
+	assign srcAddressRegEnable = 1;
+	assign dstAddressRegEnable = 1;
+	assign immediateRegEnable  = 1;
+	assign aluOutputRegEnable  = 1;
+	assign regWriteEnable      = 1;
 	
-	hexTo7Seg sevenSegConverter1(regALUoutput[3:0], sevenSeg1);
-	hexTo7Seg sevenSegConverter2(regALUoutput[7:4], sevenSeg2);
-	hexTo7Seg sevenSegConverter3(regALUoutput[11:8], sevenSeg3);
-	hexTo7Seg sevenSegConverter4(regALUoutput[15:12], sevenSeg4);
-	
-		
-	
+	// Tie the PC's enable signal to low as we aren't using it yet.
+	assign pcEnable = 0;
 endmodule
