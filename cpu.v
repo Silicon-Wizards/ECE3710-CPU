@@ -15,7 +15,7 @@ module cpu #(
 )(
 	input clk, reset,
 	input immediate,
-	input [4:0] aluControl,
+	input [3:0] aluControl,
 	input [REG_ADDR_BITS-1:0] regAddressA, regAddressB,
 	
 	output [REG_WIDTH-1:0] aluRegOutput,
@@ -60,8 +60,8 @@ module cpu #(
 	
 	// Instantiate the ALU and connect it to the datapath.
 	wire [REG_WIDTH-1:0] aluOutput;
-	wire aluCarryIn, aluCarryOut, aluZeroOut;
-	alu #(REG_WIDTH, REG_ADDR_BITS) alu(aluInputA, aluInputB, aluControl, aluCarryIn, aluOutput, aluCarryOut, aluZeroOut);
+	wire aluCarryIn; // Should this be replace with 'carry'?
+	alu #(REG_WIDTH, REG_ADDR_BITS) alu(aluInputA, aluInputB, aluControl, aluCarryIn, aluOutput, carry, low, over, zero, neg);
 		
 	// Instantiate a register to hold the ALU's output.
 	wire aluOutputRegEnable;
