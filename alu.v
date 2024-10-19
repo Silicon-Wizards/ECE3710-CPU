@@ -27,23 +27,23 @@ module alu_control#(
 	localparam OP_CODE_ADDU		=	'b0110;
 	localparam OP_CODE_ADDC		=	'b0111;
 	localparam OP_CODE_SUB		=	'b1001;
-	localparam OP_CODE_SUBC		= 	'b1010;
+	localparam OP_CODE_SUBC		= 'b1010;
 	localparam OP_CODE_CMP		=	'b1011;
 	localparam OP_CODE_AND		=	'b0001;
-	localparam OP_CODE_OR		=	'b0010;
+	localparam OP_CODE_OR			=	'b0010;
 	localparam OP_CODE_XOR		=	'b0011;
 	localparam OP_CODE_LSH		=	'b0100;
 	localparam OP_CODE_ALSHU	=	'b0110;
 	
-	localparam CONTROL_ADD 	=	'b0;
-	localparam CONTROL_ADDU	=	'b1;
-	localparam CONTROL_SUB 	=	'b10;
-	localparam CONTROL_SUBU	=	'b11;
-	localparam CONTROL_CMP 	=	'b100;
-	localparam CONTROL_AND 	=	'b101;
-	localparam CONTROL_OR 	=	'b110;
-	localparam CONTROL_XOR	=	'b111;
-	localparam CONTROL_LSH 	=	'b1000;
+	localparam CONTROL_ADD	=	'b0000;
+	localparam CONTROL_ADDU	=	'b0001;
+	localparam CONTROL_SUB	=	'b0010;
+	localparam CONTROL_SUBU	=	'b0011;
+	localparam CONTROL_CMP	=	'b0100;
+	localparam CONTROL_AND	=	'b0101;
+	localparam CONTROL_OR		=	'b0110;
+	localparam CONTROL_XOR	=	'b0111;
+	localparam CONTROL_LSH	=	'b1000;
 	
 	always @(*) begin
 		control_word <= 'b1111;
@@ -85,6 +85,7 @@ module alu_control#(
 endmodule
 
 
+
 module alu #(
 	parameter WIDTH_DATA = 16, 
 	parameter WIDTH_CONTROL = 4
@@ -96,15 +97,15 @@ module alu #(
 	output reg carry_out, low_out, over_out, neg_out, zero_out
 );
 	
-	localparam CONTROL_ADD 	=	'b0;
-	localparam CONTROL_ADDU	=	'b1;
-	localparam CONTROL_SUB 	=	'b10;
-	localparam CONTROL_SUBU	=	'b11;
-	localparam CONTROL_CMP 	=	'b100;
-	localparam CONTROL_AND 	=	'b101;
-	localparam CONTROL_OR 	=	'b110;
-	localparam CONTROL_XOR	=	'b111;
-	localparam CONTROL_LSH 	=	'b1000;
+	localparam CONTROL_ADD	=	'b0000;
+	localparam CONTROL_ADDU	=	'b0001;
+	localparam CONTROL_SUB	=	'b0010;
+	localparam CONTROL_SUBU	=	'b0011;
+	localparam CONTROL_CMP	=	'b0100;
+	localparam CONTROL_AND	=	'b0101;
+	localparam CONTROL_OR		=	'b0110;
+	localparam CONTROL_XOR	=	'b0111;
+	localparam CONTROL_LSH	=	'b1000;
 		
 	wire [WIDTH_DATA : 0] adder_sum, adder_diff;
 	wire [WIDTH_DATA - 1 : 0] inv_B;
@@ -130,8 +131,7 @@ module alu #(
 	// NEGATIVE
 	assign neg_flag = adder_diff[WIDTH_DATA];
 		
-	always @(*) 
-		begin
+	always @(*) begin
 		// Set the defaults
 		carry_out <= 0;
 		low_out <= 0;
@@ -187,7 +187,7 @@ module alu #(
 		
 		// Update the ZERO output register
 		zero_out <= zero_flag;
-		
+
 	end
 	
 endmodule

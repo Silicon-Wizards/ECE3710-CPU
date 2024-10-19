@@ -6,3 +6,6 @@ simulation/
 
 # Exclude Verilog Backup Files
 *.bak
+
+# Exclude the ECE3710-CPU.qws file that gets created and destroyed by Quartus.
+ECE3710-CPU.qws

@@ -5,7 +5,7 @@
 // (Or at least it will once we track down the bram.v file)
 //
 // Authors:  Kenneth Gordon, Adrian Sucahyo, Bryant Watson, and Inhyup Lee
-// Date:  October 14, 2024
+// Date:  October 18, 2024
 //
 
 module registerFile #(
@@ -19,6 +19,7 @@ module registerFile #(
 	input  [WIDTH-1:0] writeData,
 	output [WIDTH-1:0] readData1, readData2
 );
+
 	// Create the RAM block that will hold the register file.
 	reg  [WIDTH-1:0] RAM [(1<<ADDR_BITS)-1:0];
 	
@@ -36,4 +37,5 @@ module registerFile #(
 	// Read the values of both registers combinationally.
 	assign readData1 = RAM[address1];
 	assign readData2 = RAM[address2];
+	
 endmodule
