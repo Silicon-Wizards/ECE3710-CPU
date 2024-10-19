@@ -113,10 +113,10 @@ module alu #(
 	
 	// Continuous Assignment Values
 	// ADD / SUB
-	assign adder_sum = A + B + carry_in;
+	assign adder_sum = A + B;
 	
 	assign inv_B = ~B + 1'b1;
-	assign adder_diff = A + inv_B - carry_in;
+	assign adder_diff = A + inv_B;
 	
 	// Internal Computation of Flags
 	// OVERFLOW
@@ -147,14 +147,14 @@ module alu #(
 				over_out <= over_flag;
 			end
 			CONTROL_ADDU : begin
-				{carry_out, result} <= adder_sum;
+				{carry_out, result} <= adder_sum + carry_in;
 			end
 			CONTROL_SUB : begin
 				result <= adder_diff[WIDTH_DATA - 1 : 0];
 				over_out <= over_flag;
 			end
 			CONTROL_SUBU : begin
-				{carry_out, result} <= adder_diff;
+				{carry_out, result} <= adder_diff - carry_in;
 			end
 			
 			// Logical Operations
