@@ -4,7 +4,7 @@
 // This module takes a signle (4-bit) binary value and displays it onto a 7-segment display as a hex number.
 //
 // Authors:  Kenneth Gordon, Adrian Sucahyo, Bryant Watson, and Inhyup Lee
-// Date:  October 17, 2024
+// Date:  October 18, 2024
 //
 
 module hexTo7Seg(
@@ -34,4 +34,5 @@ module hexTo7Seg(
       default : hexOutput = ~7'b0000000; // Always good to have a default! 
     endcase
 	end
+	
 endmodule // hexTo7Seg

@@ -4,7 +4,7 @@
 // This file contains the definitions of various datapath components for use in the ECE3710-CPU project.
 //
 // Authors:  Kenneth Gordon, Adrian Sucahyo, Bryant Watson, and Inhyup Lee
-// Date:  October 14, 2024
+// Date:  October 18, 2024
 //
 
 module flopenr #(parameter WIDTH = 16)(
@@ -20,6 +20,7 @@ module flopenr #(parameter WIDTH = 16)(
 		else if (enable)
 			dataOut <= dataIn;
 	end
+	
 endmodule // flopenr
 
 module mux2 #(parameter WIDTH = 16)(
@@ -27,8 +28,10 @@ module mux2 #(parameter WIDTH = 16)(
 	input  [WIDTH-1:0] dataA, dataB,
 	output [WIDTH-1:0] dataOut
 );
+
 	// Mux based off of the value of the select signal.
 	assign dataOut = select ? dataB : dataA;
+	
 endmodule // mux2
 
 module mux4 #(parameter WIDTH = 16)(
@@ -36,6 +39,7 @@ module mux4 #(parameter WIDTH = 16)(
 	input      [WIDTH-1:0] dataA, dataB, dataC, dataD,
 	output reg [WIDTH-1:0] dataOut
 );
+	
 	// Mux based off of the value of the select signal.
 	always @(*) begin
 		case(select)
@@ -45,5 +49,5 @@ module mux4 #(parameter WIDTH = 16)(
 			2'b11: dataOut <= dataD;
 		endcase
 	end
+	
 endmodule // mux4
-

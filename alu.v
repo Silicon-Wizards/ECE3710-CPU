@@ -1,10 +1,11 @@
-
+//
+// alu.v
+//
 // This module contains all the implementation for the ALU for use in the ECE3710-CPU project.
 //
 // Authors:  Kenneth Gordon, Adrian Sucahyo, Bryant Watson, and Inhyup Lee
 // Date:  October 18, 2024
 //
-
 
 module alu #(
 	parameter WIDTH_DATA = 16, 
@@ -17,14 +18,14 @@ module alu #(
 	output reg carry_out, low_out, over_out, neg_out, zero_out
 );
 	
-	parameter CONTROL_ADD 	=	'b0;
-	parameter CONTROL_ADDU	=	'b1;
-	parameter CONTROL_SUB 	=	'b10;
-	parameter CONTROL_SUBU	=	'b11;
-	parameter CONTROL_CMP 	=	'b100;
-	parameter CONTROL_AND 	=	'b101;
-	parameter CONTROL_OR 	=	'b110;
-	parameter CONTROL_XOR	=	'b111;
+	parameter CONTROL_ADD 	=	'b0000;
+	parameter CONTROL_ADDU	=	'b0001;
+	parameter CONTROL_SUB 	=	'b0010;
+	parameter CONTROL_SUBU	=	'b0011;
+	parameter CONTROL_CMP 	=	'b0100;
+	parameter CONTROL_AND 	=	'b0101;
+	parameter CONTROL_OR 	=	'b0110;
+	parameter CONTROL_XOR	=	'b0111;
 	parameter CONTROL_LSH 	=	'b1000;
 		
 	wire [WIDTH_DATA : 0] adder_sum, adder_diff;
@@ -51,8 +52,7 @@ module alu #(
 	// NEGATIVE
 	assign neg_flag = adder_diff[WIDTH_DATA];
 		
-	always @(*) 
-		begin
+	always @(*) begin
 		// Set the defaults
 		carry_out <= 0;
 		low_out <= 0;
@@ -108,7 +108,6 @@ module alu #(
 		
 		// Update the ZERO output register
 		zero_out <= zero_flag;
-		
 	end
 	
 endmodule
