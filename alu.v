@@ -1,11 +1,88 @@
 //
 // alu.v
 //
-// This module contains all the implementation for the ALU for use in the ECE3710-CPU project.
+// This file contains all the implementation for the ALU for use in the ECE3710-CPU project.
+//	The ALU module is defined here, as well as the supplementary ALU control module for generating
+// ALU control words from the op_codes.
 //
 // Authors:  Kenneth Gordon, Adrian Sucahyo, Bryant Watson, and Inhyup Lee
 // Date:  October 15, 2024
 //
+
+module alu_control#(
+	parameter WIDTH_OP_CODE = 4, 
+	parameter WIDTH_INSTR_TYPE = 2,
+	parameter WIDTH_CONTROL = 4
+)(
+	input [WIDTH_OP_CODE - 1 : 0] op_code,
+	input [WIDTH_INSTR_TYPE - 1 : 0] instr_type,	// This is determined before sending op code to this controller
+	output reg [WIDTH_CONTROL - 1 : 0] control_word,
+	output reg carry_bit
+);
+
+	localparam INSTR_REGISTER	= 'b0;
+	localparam INSTR_SHIFT		= 'b1;
+	
+	localparam OP_CODE_ADD		=	'b0101;
+	localparam OP_CODE_ADDU		=	'b0110;
+	localparam OP_CODE_ADDC		=	'b0111;
+	localparam OP_CODE_SUB		=	'b1001;
+	localparam OP_CODE_SUBC		= 	'b1010;
+	localparam OP_CODE_CMP		=	'b1011;
+	localparam OP_CODE_AND		=	'b0001;
+	localparam OP_CODE_OR		=	'b0010;
+	localparam OP_CODE_XOR		=	'b0011;
+	localparam OP_CODE_LSH		=	'b0100;
+	localparam OP_CODE_ALSHU	=	'b0110;
+	
+	localparam CONTROL_ADD 	=	'b0;
+	localparam CONTROL_ADDU	=	'b1;
+	localparam CONTROL_SUB 	=	'b10;
+	localparam CONTROL_SUBU	=	'b11;
+	localparam CONTROL_CMP 	=	'b100;
+	localparam CONTROL_AND 	=	'b101;
+	localparam CONTROL_OR 	=	'b110;
+	localparam CONTROL_XOR	=	'b111;
+	localparam CONTROL_LSH 	=	'b1000;
+	
+	always @(*) begin
+		control_word <= 'b1111;
+		carry_bit <= 0;
+		
+		case (instr_type)
+			INSTR_REGISTER : begin
+				case (op_code)
+					OP_CODE_ADD 	: control_word <= CONTROL_ADD;	// ADD is normal
+					OP_CODE_ADDU 	: control_word <= CONTROL_SUB;	// ADDU is normal
+					OP_CODE_ADDC 	: begin
+						control_word <= CONTROL_ADD;						// ADDC is normal with carry bit enabled
+						carry_bit <= 'b1;
+					end
+					OP_CODE_SUB 	: control_word <= CONTROL_SUB;	// SUB is normal
+					OP_CODE_SUBC 	: begin
+						control_word <= CONTROL_SUB;						// SUBC is normal with carry bit enabled
+						carry_bit <= 'b1;
+					end
+					OP_CODE_CMP		: control_word <= CONTROL_CMP;	// CMP is normal
+					OP_CODE_AND		: control_word <= CONTROL_AND;	// AND is normal
+					OP_CODE_OR		: control_word <= CONTROL_OR;		// OR is normal
+					OP_CODE_XOR		: control_word <= CONTROL_XOR;	// XOR is normal
+				endcase
+			end
+			INSTR_SHIFT : begin
+				case (op_code)
+					OP_CODE_LSH		: control_word <= CONTROL_LSH;	// LSH is normal
+					OP_CODE_ALSHU	: begin
+						control_word <= CONTROL_LSH;						// ALSH is normal and uses carry bit for RSH
+						carry_bit <= 'b1;
+					end
+				endcase
+			end
+		endcase
+	
+	end
+	
+endmodule
 
 
 module alu #(
@@ -19,15 +96,15 @@ module alu #(
 	output reg carry_out, low_out, over_out, neg_out, zero_out
 );
 	
-	parameter CONTROL_ADD 	=	'b0;
-	parameter CONTROL_ADDU	=	'b1;
-	parameter CONTROL_SUB 	=	'b10;
-	parameter CONTROL_SUBU	=	'b11;
-	parameter CONTROL_CMP 	=	'b100;
-	parameter CONTROL_AND 	=	'b101;
-	parameter CONTROL_OR 	=	'b110;
-	parameter CONTROL_XOR	=	'b111;
-	parameter CONTROL_LSH 	=	'b1000;
+	localparam CONTROL_ADD 	=	'b0;
+	localparam CONTROL_ADDU	=	'b1;
+	localparam CONTROL_SUB 	=	'b10;
+	localparam CONTROL_SUBU	=	'b11;
+	localparam CONTROL_CMP 	=	'b100;
+	localparam CONTROL_AND 	=	'b101;
+	localparam CONTROL_OR 	=	'b110;
+	localparam CONTROL_XOR	=	'b111;
+	localparam CONTROL_LSH 	=	'b1000;
 		
 	wire [WIDTH_DATA : 0] adder_sum, adder_diff;
 	wire [WIDTH_DATA - 1 : 0] inv_B;
@@ -70,14 +147,14 @@ module alu #(
 				over_out <= over_flag;
 			end
 			CONTROL_ADDU : begin
-				{carry_out, result} <= adder_sum;
+				{carry_out, result} <= adder_sum + carry_in;
 			end
 			CONTROL_SUB : begin
 				result <= adder_diff[WIDTH_DATA - 1 : 0];
 				over_out <= over_flag;
 			end
 			CONTROL_SUBU : begin
-				{carry_out, result} <= adder_diff;
+				{carry_out, result} <= adder_diff - carry_in;
 			end
 			
 			// Logical Operations
@@ -99,7 +176,7 @@ module alu #(
 			// Shifting assumes A is Rdest, B is Ramount
 			CONTROL_LSH	: begin
 				if (B[WIDTH_DATA - 1] == 1'b1) begin
-					result <= A >> (inv_B);
+					result <= {carry_in, A} >> inv_B;
 				end else begin
 					result <= A << B;
 				end
