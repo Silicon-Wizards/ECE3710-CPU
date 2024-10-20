@@ -16,12 +16,6 @@ module tb_alu;
 	integer i;
 	integer j;
 	
-	//input [WIDTH_DATA - 1 : 0] A, B,
-	//input [WIDTH_CONTROL - 1 : 0] control_word,
-	//input carry_in,
-	//output reg [WIDTH_DATA - 1 : 0] result,
-	//output reg carry_out, zero_out
-	
 	reg [WIDTH_DATA - 1 : 0]		tb_A; 				//input [WIDTH_DATA - 1 : 0] A, B
 	reg [WIDTH_DATA - 1 : 0] 		tb_B; 				//input [WIDTH_DATA - 1 : 0] A, B
 	reg [WIDTH_CONTROL - 1 : 0]	tb_control_word;	//input [WIDTH_CONTROL - 1 : 0] control_word
