@@ -53,7 +53,7 @@ module alu_control#(
 			INSTR_STATIC : begin
 				case (op_code)
 					OP_CODE_ADD 	: control_word <= CONTROL_ADD;	// ADD is normal
-					OP_CODE_ADDU 	: control_word <= CONTROL_SUB;	// ADDU is normal
+					OP_CODE_ADDU 	: control_word <= CONTROL_ADDU;	// ADDU is normal
 					OP_CODE_ADDC 	: begin
 						control_word <= CONTROL_ADD;						// ADDC is normal with carry bit enabled
 						carry_bit <= 'b1;
@@ -73,7 +73,7 @@ module alu_control#(
 				case (op_code)
 					OP_CODE_LSH		: control_word <= CONTROL_LSH;	// LSH is normal
 					OP_CODE_ALSHU	: begin
-						control_word <= CONTROL_LSH;						// ALSH is normal and uses carry bit for RSH
+						control_word <= CONTROL_LSH;						// ALSH is normal and uses carry bit for RSH in bit
 						carry_bit <= 'b1;
 					end
 				endcase
