@@ -108,7 +108,7 @@ module alu #(
 		
 	wire [WIDTH_DATA : 0] adder_sum, adder_diff;
 	wire [WIDTH_DATA - 1 : 0] inv_B;
-	wire low_flag, over_flag, zero_flag, neg_flag;
+	wire low_flag, over_flag_sum, over_flag_diff, zero_flag, neg_flag;
 	
 	// Continuous Assignment Values
 	// ADD / SUB
@@ -119,7 +119,8 @@ module alu #(
 	
 	// Internal Computation of Flags
 	// OVERFLOW
-	assign over_flag = (A[WIDTH_DATA - 1] == B[WIDTH_DATA - 1] ? ((A[WIDTH_DATA - 1] != result[WIDTH_DATA - 1]) ? 1'b1 : 1'b0) : 1'b0);
+	assign over_flag_sum = (A[WIDTH_DATA - 1] == B[WIDTH_DATA - 1] ? ((A[WIDTH_DATA - 1] != result[WIDTH_DATA - 1]) ? 1'b1 : 1'b0) : 1'b0);
+	assign over_flag_diff = (A[WIDTH_DATA - 1] == inv_B[WIDTH_DATA - 1] ? ((A[WIDTH_DATA - 1] != result[WIDTH_DATA - 1]) ? 1'b1 : 1'b0) : 1'b0)
 	
 	// ZERO
 	assign zero_flag = (result == 0) ? 1'b1 : 1'b0;
@@ -128,7 +129,7 @@ module alu #(
 	assign low_flag = A < B;
 	
 	// NEGATIVE
-	assign neg_flag = adder_diff[WIDTH_DATA];
+	assign neg_flag = result[WIDTH_DATA];
 		
 	always @(*) begin
 		// Set the defaults
@@ -143,14 +144,14 @@ module alu #(
 			// Arithmetic Operations
 			CONTROL_ADD : begin
 				result <= adder_sum[WIDTH_DATA - 1 : 0];
-				over_out <= over_flag;
+				over_out <= over_flag_sum;
 			end
 			CONTROL_ADDU : begin
 				{carry_out, result} <= adder_sum + carry_in;
 			end
 			CONTROL_SUB : begin
 				result <= adder_diff[WIDTH_DATA - 1 : 0];
-				over_out <= over_flag;
+				over_out <= over_flag_diff;
 			end
 			CONTROL_SUBU : begin
 				{carry_out, result} <= adder_diff - carry_in;
