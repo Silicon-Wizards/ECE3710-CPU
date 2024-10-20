@@ -120,7 +120,7 @@ module alu #(
 	// Internal Computation of Flags
 	// OVERFLOW
 	assign over_flag_sum = (A[WIDTH_DATA - 1] == B[WIDTH_DATA - 1] ? ((A[WIDTH_DATA - 1] != result[WIDTH_DATA - 1]) ? 1'b1 : 1'b0) : 1'b0);
-	assign over_flag_diff = (A[WIDTH_DATA - 1] == inv_B[WIDTH_DATA - 1] ? ((A[WIDTH_DATA - 1] != result[WIDTH_DATA - 1]) ? 1'b1 : 1'b0) : 1'b0)
+	assign over_flag_diff = (A[WIDTH_DATA - 1] == inv_B[WIDTH_DATA - 1] ? ((A[WIDTH_DATA - 1] != result[WIDTH_DATA - 1]) ? 1'b1 : 1'b0) : 1'b0);
 	
 	// ZERO
 	assign zero_flag = (result == 0) ? 1'b1 : 1'b0;
@@ -129,7 +129,7 @@ module alu #(
 	assign low_flag = A < B;
 	
 	// NEGATIVE
-	assign neg_flag = result[WIDTH_DATA];
+	assign neg_flag = result[WIDTH_DATA - 1];
 		
 	always @(*) begin
 		// Set the defaults
