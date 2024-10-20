@@ -113,9 +113,9 @@ module alu #(
 	// Continuous Assignment Values
 	// ADD / SUB
 	assign adder_sum = A + B;
+	assign adder_diff = A - B;
 	
 	assign inv_B = ~B + 1'b1;
-	assign adder_diff = A + inv_B;
 	
 	// Internal Computation of Flags
 	// OVERFLOW
