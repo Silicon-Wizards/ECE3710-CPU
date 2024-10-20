@@ -11,7 +11,7 @@
 
 module alu_control#(
 	parameter WIDTH_OP_CODE = 4, 
-	parameter WIDTH_INSTR_TYPE = 2,
+	parameter WIDTH_INSTR_TYPE = 1,
 	parameter WIDTH_CONTROL = 4
 )(
 	input [WIDTH_OP_CODE - 1 : 0] op_code,
@@ -20,7 +20,7 @@ module alu_control#(
 	output reg carry_bit
 );
 
-	localparam INSTR_REGISTER	= 'b0;
+	localparam INSTR_STATIC		= 'b0;
 	localparam INSTR_SHIFT		= 'b1;
 	
 	localparam OP_CODE_ADD		=	'b0101;
@@ -50,7 +50,7 @@ module alu_control#(
 		carry_bit <= 0;
 		
 		case (instr_type)
-			INSTR_REGISTER : begin
+			INSTR_STATIC : begin
 				case (op_code)
 					OP_CODE_ADD 	: control_word <= CONTROL_ADD;	// ADD is normal
 					OP_CODE_ADDU 	: control_word <= CONTROL_SUB;	// ADDU is normal
@@ -112,10 +112,10 @@ module alu #(
 	
 	// Continuous Assignment Values
 	// ADD / SUB
-	assign adder_sum = A + B + carry_in;
+	assign adder_sum = A + B;
 	
 	assign inv_B = ~B + 1'b1;
-	assign adder_diff = A + inv_B - carry_in;
+	assign adder_diff = A + inv_B;
 	
 	// Internal Computation of Flags
 	// OVERFLOW
@@ -147,14 +147,14 @@ module alu #(
 				over_out <= over_flag;
 			end
 			CONTROL_ADDU : begin
-				{carry_out, result} <= adder_sum;
+				{carry_out, result} <= adder_sum + carry_in;
 			end
 			CONTROL_SUB : begin
 				result <= adder_diff[WIDTH_DATA - 1 : 0];
 				over_out <= over_flag;
 			end
 			CONTROL_SUBU : begin
-				{carry_out, result} <= adder_diff;
+				{carry_out, result} <= adder_diff - carry_in;
 			end
 			
 			// Logical Operations
