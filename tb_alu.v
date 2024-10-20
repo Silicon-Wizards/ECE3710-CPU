@@ -48,7 +48,6 @@ module tb_alu;
 	);
 	
 	initial begin
-		/**
 		$display("TEST: and");
 		tb_carry_in = 0;
 		tb_control_word = CONTROL_AND;
@@ -163,7 +162,6 @@ module tb_alu;
 		end
 		$display("");
 		$display("");
-		**/
 		
 		
 		$display("TEST CF- unsigned overflow"); //---------------------------------------------------------------------------------------------------------
@@ -441,7 +439,7 @@ module tb_alu;
 		tb_A = 16'h0001;
 		tb_B = 16'h0000;
 		#5;
-		if(tb_neg_out != 1) $display("ERROR!! NF flag: %h not set correctly should be 1", tb_neg_out);
+		if(tb_neg_out != 0) $display("ERROR!! NF flag: %h not set correctly should be 0", tb_neg_out);
 		//-------------
 		tb_carry_in = 0;
 		tb_control_word = CONTROL_CMP;
@@ -455,7 +453,7 @@ module tb_alu;
 		tb_A = 16'h0000;
 		tb_B = 16'h0001;
 		#5;
-		if(tb_neg_out != 0) $display("ERROR!! NF flag: %h not set correctly should be 0", tb_neg_out);
+		if(tb_neg_out != 1) $display("ERROR!! NF flag: %h not set correctly should be 1", tb_neg_out);
 		
 		$display("TEST LF- low_out"); //------------------------------------------------------------------------------------------------------------------------------------------------------
 		tb_carry_in = 0;
