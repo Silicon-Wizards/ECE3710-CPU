@@ -165,6 +165,7 @@ module tb_alu;
 		$display("");
 		**/
 		
+		
 		$display("TEST CF- unsigned overflow"); //---------------------------------------------------------------------------------------------------------
 		tb_carry_in = 0;
 		tb_control_word = CONTROL_ADDU;
@@ -314,7 +315,7 @@ module tb_alu;
 		
 		
 		
-		$display("TEST ZF- signed overflow"); //------------------------------------------------------------------------------------------------------------------------------------------------------
+		$display("TEST ZF- zero"); //------------------------------------------------------------------------------------------------------------------------------------------------------
 		tb_carry_in = 0;
 		tb_control_word = CONTROL_ADDU;
 		tb_A = 16'h0000;
@@ -401,6 +402,62 @@ module tb_alu;
 		tb_B = 16'h0001;
 		#5;
 		if(tb_zero_out != 0) $display("ERROR!! ZF flag: %h not set correctly should be 0", tb_carry_out);
+		//-------------
 		
+		
+		
+		$display("TEST NF- Negitive first bit 1"); //------------------------------------------------------------------------------------------------------------------------------------------------------
+		tb_carry_in = 0;
+		tb_control_word = CONTROL_SUB;
+		tb_A = 16'h0000;
+		tb_B = 16'h0001;
+		#5;
+		if(tb_neg_out != 1) $display("ERROR!! NF flag: %h not set correctly should be 1", tb_neg_out);
+		//-------------
+		tb_carry_in = 0;
+		tb_control_word = CONTROL_SUBU;
+		tb_A = 16'h0000;
+		tb_B = 16'h0001;
+		#5;
+		if(tb_neg_out != 1) $display("ERROR!! NF flag: %h not set correctly should be 1", tb_neg_out);
+		//-------------
+		tb_carry_in = 0;
+		tb_control_word = CONTROL_ADD;
+		tb_A = 16'hFFF0;
+		tb_B = 16'h0001;
+		#5;
+		if(tb_neg_out != 1) $display("ERROR!! NF flag: %h not set correctly should be 1", tb_neg_out);
+		//-------------
+		tb_carry_in = 0;
+		tb_control_word = CONTROL_ADDU;
+		tb_A = 16'hFFF0;
+		tb_B = 16'h0001;
+		#5;
+		if(tb_neg_out != 1) $display("ERROR!! NF flag: %h not set correctly should be 1", tb_neg_out);
+		//-------------
+		
+		
+		$display("TEST LF- low_out"); //------------------------------------------------------------------------------------------------------------------------------------------------------
+		tb_carry_in = 0;
+		tb_control_word = CONTROL_CMP;
+		tb_A = 16'h0001;
+		tb_B = 16'h0000;
+		#5;
+		if(tb_low_out != 0) $display("ERROR!! LF flag: %h not set correctly should be 0", tb_low_out);
+		//-------------
+		tb_carry_in = 0;
+		tb_control_word = CONTROL_CMP;
+		tb_A = 16'h0000;
+		tb_B = 16'h0001;
+		#5;
+		if(tb_low_out != 1) $display("ERROR!! LF flag: %h not set correctly should be 1", tb_low_out);
+		//-------------
+		tb_carry_in = 0;
+		tb_control_word = CONTROL_CMP;
+		tb_A = 16'h0000;
+		tb_B = 16'h0000;
+		#5;
+		if(tb_low_out != 0) $display("ERROR!! LF flag: %h not set correctly should be 0", tb_low_out);
+		//-------------
 	end
 endmodule
