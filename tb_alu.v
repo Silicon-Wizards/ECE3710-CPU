@@ -56,11 +56,10 @@ module tb_alu;
 				tb_A = i;
 				tb_B = j;
 				#5;
-				$display("i: %h \t j: %h \t result: %h, \t should be: %h", i, j, tb_result, (i[15:0] & j[15:0]));
+				if(tb_result != (i[15:0] & j[15:0]))
+					$display("ERROR!!: i: %h \t j: %h \t result: %h, \t should be: %h", i, j, tb_result, (i[15:0] & j[15:0]));
 			end
 		end
-		$display("");
-		$display("");
 		
 		$display("TEST OR");
 		tb_carry_in = 0;
@@ -70,12 +69,10 @@ module tb_alu;
 				tb_A = i;
 				tb_B = j;
 				#5;
-				$display("i: %h \t j: %h \t result: %h, \t should be: %h", i, j, tb_result, (i[15:0] | j[15:0]));
+				if(tb_result != (i[15:0] | j[15:0]))
+					$display("ERROR!!: i: %h \t j: %h \t result: %h, \t should be: %h", i, j, tb_result, (i[15:0] | j[15:0]));
 			end
 		end
-		$display("");
-		$display("");
-		
 		
 		$display("TEST XOR");
 		tb_carry_in = 0;
@@ -85,12 +82,10 @@ module tb_alu;
 				tb_A = i;
 				tb_B = j;
 				#5;
-				$display("i: %h \t j: %h \t result: %h, \t should be: %h", i, j, tb_result, (i[15:0] ^ j[15:0]));
+				if(tb_result != (i[15:0] ^ j[15:0]))
+					$display("ERROR!!: i: %h \t j: %h \t result: %h, \t should be: %h", i, j, tb_result, (i[15:0] ^ j[15:0]));
 			end
 		end
-		$display("");
-		$display("");
-		
 		
 		$display("TEST LSH");
 		tb_carry_in = 0;
@@ -100,12 +95,10 @@ module tb_alu;
 				tb_A = i;
 				tb_B = j;
 				#5;
-				$display("i: %h \t j: %h \t result: %h, \t should be: %h", i, j, tb_result, (i[15:0] << j[15:0]));
+				if(tb_result != (i[15:0] << j[15:0]))
+					$display("ERROR!!: i: %h \t j: %h \t result: %h, \t should be: %h", i, j, tb_result, (i[15:0] << j[15:0]));
 			end
-		end
-		$display("");
-		$display("");
-		
+		end	
 		
 		$display("TEST ADDU");
 		tb_carry_in = 0;
@@ -115,11 +108,10 @@ module tb_alu;
 				tb_A = i;
 				tb_B = j;
 				#5;
-				$display("i: %h \t j: %h \t result: %h, \t should be: %h", i, j, tb_result, (i[15:0] + j[15:0]));
+				if(tb_result != (i[15:0] + j[15:0]))
+					$display("ERROR!!: i: %h \t j: %h \t result: %h, \t should be: %h", i, j, tb_result, (i[15:0] + j[15:0]));
 			end
 		end
-		$display("");
-		$display("");
 		
 		$display("TEST ADD");
 		tb_carry_in = 0;
@@ -129,11 +121,10 @@ module tb_alu;
 				tb_A = i;
 				tb_B = j;
 				#5;
-				$display("i: %h \t j: %h \t result: %h, \t should be: %h", i, j, tb_result, (i[15:0] + j[15:0]));
+				if(tb_result != (i[15:0] + j[15:0]))
+					$display("ERROR!!: i: %h \t j: %h \t result: %h, \t should be: %h", i, j, tb_result, (i[15:0] + j[15:0]));
 			end
 		end
-		$display("");
-		$display("");
 		
 		$display("TEST SUBU");
 		tb_carry_in = 0;
@@ -143,11 +134,10 @@ module tb_alu;
 				tb_A = i;
 				tb_B = j;
 				#5;
-				$display("i: %h \t j: %h \t result: %h, \t should be: %h", i, j, tb_result, (i[15:0] - j[15:0]));
+				if(tb_result != (i[15:0] - j[15:0]))
+					$display("ERROR!!: i: %h \t j: %h \t result: %h, \t should be: %h", i, j, tb_result, (i[15:0] - j[15:0]));
 			end
 		end
-		$display("");
-		$display("");
 		
 		$display("TEST SUB");
 		tb_carry_in = 0;
@@ -157,12 +147,10 @@ module tb_alu;
 				tb_A = i;
 				tb_B = j;
 				#5;
-				$display("i: %h \t j: %h \t result: %h, \t should be: %h", i, j, tb_result, (i[15:0] - j[15:0]));
+				if(tb_result != (i[15:0] - j[15:0]))
+					$display("ERROR!!: i: %h \t j: %h \t result: %h, \t should be: %h", i, j, tb_result, (i[15:0] - j[15:0]));
 			end
 		end
-		$display("");
-		$display("");
-		
 		
 		$display("TEST CF- unsigned overflow"); //---------------------------------------------------------------------------------------------------------
 		tb_carry_in = 0;
