@@ -119,8 +119,8 @@ module alu #(
 	
 	// Internal Computation of Flags
 	// OVERFLOW
-	assign over_flag_sum = (A[WIDTH_DATA - 1] == B[WIDTH_DATA - 1] ? ((A[WIDTH_DATA - 1] != result[WIDTH_DATA - 1]) ? 1'b1 : 1'b0) : 1'b0);
-	assign over_flag_diff = (A[WIDTH_DATA - 1] == inv_B[WIDTH_DATA - 1] ? ((A[WIDTH_DATA - 1] != result[WIDTH_DATA - 1]) ? 1'b1 : 1'b0) : 1'b0);
+	assign over_flag_sum = (A[WIDTH_DATA - 1] == B[WIDTH_DATA - 1] ? ((B[WIDTH_DATA - 1] != result[WIDTH_DATA - 1]) ? 1'b1 : 1'b0) : 1'b0);
+	assign over_flag_diff = (A[WIDTH_DATA - 1] != B[WIDTH_DATA - 1] ? ((B[WIDTH_DATA - 1] == result[WIDTH_DATA - 1]) ? 1'b1 : 1'b0) : 1'b0);
 	
 	// ZERO
 	assign zero_flag = (result == 0) ? 1'b1 : 1'b0;
@@ -129,7 +129,7 @@ module alu #(
 	assign low_flag = A < B;
 	
 	// NEGATIVE
-	assign neg_flag = result[WIDTH_DATA - 1];
+	assign neg_flag = adder_diff[WIDTH_DATA];
 		
 	always @(*) begin
 		// Set the defaults
@@ -145,6 +145,7 @@ module alu #(
 			CONTROL_ADD : begin
 				result <= adder_sum[WIDTH_DATA - 1 : 0];
 				over_out <= over_flag_sum;
+				neg_out <= result[WIDTH_DATA - 1];
 			end
 			CONTROL_ADDU : begin
 				{carry_out, result} <= adder_sum + carry_in;
@@ -152,6 +153,7 @@ module alu #(
 			CONTROL_SUB : begin
 				result <= adder_diff[WIDTH_DATA - 1 : 0];
 				over_out <= over_flag_diff;
+				neg_out <= result[WIDTH_DATA - 1];
 			end
 			CONTROL_SUBU : begin
 				{carry_out, result} <= adder_diff - carry_in;
