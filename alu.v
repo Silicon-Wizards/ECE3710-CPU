@@ -138,9 +138,7 @@ module alu #(
 		low_out <= 0;
 		over_out <= 0;
 		neg_out <= 0;
-		
-		result <= 0;
-				
+						
 		case (control_word)
 			// Arithmetic Operations
 			CONTROL_ADD : begin
