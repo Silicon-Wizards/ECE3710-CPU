@@ -46,7 +46,6 @@ module alu_control#(
 	localparam CONTROL_LSH 	=	'b1000;
 	
 	always @(*) begin
-		control_word <= 'b1111;
 		carry_bit <= 0;
 		
 		case (instr_type)
@@ -67,6 +66,7 @@ module alu_control#(
 					OP_CODE_AND		: control_word <= CONTROL_AND;	// AND is normal
 					OP_CODE_OR		: control_word <= CONTROL_OR;		// OR is normal
 					OP_CODE_XOR		: control_word <= CONTROL_XOR;	// XOR is normal
+					default : control_word <= 'b1111;
 				endcase
 			end
 			INSTR_SHIFT : begin
@@ -76,6 +76,7 @@ module alu_control#(
 						control_word <= CONTROL_LSH;						// ALSH is normal and uses carry bit for RSH in bit
 						carry_bit <= 'b1;
 					end
+					default : control_word <= 'b1111;
 				endcase
 			end
 		endcase
