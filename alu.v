@@ -141,16 +141,16 @@ module alu #(
 		case (control_word)
 			// Arithmetic Operations
 			CONTROL_ADD : begin
-				result <= adder_sum[WIDTH_DATA - 1 : 0];
-				over_out <= over_flag_sum;
+				result <= (adder_sum[WIDTH_DATA - 1 : 0] + carry_in);
+				over_out <= carry_in ? adder_sum[WIDTH_DATA - 1 : 0] == 'h7FFF : over_flag_sum;
 				neg_out <= result[WIDTH_DATA - 1];
 			end
 			CONTROL_ADDU : begin
 				{carry_out, result} <= adder_sum + carry_in;
 			end
 			CONTROL_SUB : begin
-				result <= adder_diff[WIDTH_DATA - 1 : 0];
-				over_out <= over_flag_diff;
+				result <= (adder_diff[WIDTH_DATA - 1 : 0] - carry_in);
+				over_out <= carry_in ? adder_diff[WIDTH_DATA - 1 : 0] == 'h8000 : over_flag_diff;
 				neg_out <= result[WIDTH_DATA - 1];
 			end
 			CONTROL_SUBU : begin
