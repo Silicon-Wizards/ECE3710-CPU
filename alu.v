@@ -6,7 +6,7 @@
 // ALU control words from the op_codes.
 //
 // Authors:  Kenneth Gordon, Adrian Sucahyo, Bryant Watson, and Inhyup Lee
-// Date:  October 18, 2024
+// Date:  October 15, 2024
 //
 
 module alu_control#(
@@ -97,15 +97,15 @@ module alu #(
 	output reg carry_out, low_out, over_out, neg_out, zero_out
 );
 	
-	parameter CONTROL_ADD 	=	'b0000;
-	parameter CONTROL_ADDU	=	'b0001;
-	parameter CONTROL_SUB 	=	'b0010;
-	parameter CONTROL_SUBU	=	'b0011;
-	parameter CONTROL_CMP 	=	'b0100;
-	parameter CONTROL_AND 	=	'b0101;
-	parameter CONTROL_OR 	=	'b0110;
-	parameter CONTROL_XOR	=	'b0111;
-	parameter CONTROL_LSH 	=	'b1000;
+	localparam CONTROL_ADD 	=	'b0;
+	localparam CONTROL_ADDU	=	'b1;
+	localparam CONTROL_SUB 	=	'b10;
+	localparam CONTROL_SUBU	=	'b11;
+	localparam CONTROL_CMP 	=	'b100;
+	localparam CONTROL_AND 	=	'b101;
+	localparam CONTROL_OR 	=	'b110;
+	localparam CONTROL_XOR	=	'b111;
+	localparam CONTROL_LSH 	=	'b1000;
 		
 	wire [WIDTH_DATA : 0] adder_sum, adder_diff;
 	wire [WIDTH_DATA - 1 : 0] inv_B;
@@ -183,7 +183,7 @@ module alu #(
 				end
 				
 			end
-			default : begin result <= 0; end
+			default : begin result <= 'hAAAA; end
 		endcase
 		
 		// Update the ZERO output register

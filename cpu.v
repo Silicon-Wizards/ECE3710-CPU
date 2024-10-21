@@ -11,7 +11,6 @@
 module cpu #(
 	parameter REG_WIDTH = 16,
 	parameter REG_ADDR_BITS = 3, // Changed from 4 to 3 for synthesis as we don't have enough pins for 4.
-	parameter INSTR_TYPE = 1, 	  // Temporarily set this parameter for ALU control
 	parameter FILE_LOCATION = "../reg_values.dat" // Load a register file with values for FPGA testing.
 )(
 	input clk, reset,
@@ -76,10 +75,12 @@ module cpu #(
 	mux2 #(REG_WIDTH) aluInputBMux(aluInputBMuxSelect, regReadData2, immediateRegOut, aluInputB);
 	
 	// Instantiate the ALU_control for ALU input.
-	wire [INSTR_TYPE-1:0] instrType;		// Temporary input wire
-	wire [REG_ADDR_BITS-1:0] aluControlWord;
+	wire instrType;
+	wire [4-1:0] aluControlWord;
 	wire aluCarryIn;
-	alu_control #(4, INSTR_TYPE, 4) aluControl(aluOpCode, instrType, aluControlWord, aluCarryIn);
+	
+	assign instrType = 1; // Hardcoded as we don't have enough inputs to make this work
+	alu_control aluControl(aluOpCode, instrType, aluControlWord, aluCarryIn);
 	
 	// Instantiate the ALU and connect it to the datapath.
 	wire [REG_WIDTH-1:0] aluOutput;
