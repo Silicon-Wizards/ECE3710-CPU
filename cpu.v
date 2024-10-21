@@ -79,11 +79,11 @@ module cpu #(
 	wire [INSTR_TYPE-1:0] instrType;		// Temporary input wire
 	wire [REG_ADDR_BITS-1:0] aluControlWord;
 	wire aluCarryIn;
-	alu_control #(REG_ADDR_BITS, INSTR_TYPE, REG_ADDR_BITS) aluControl(aluOpCode, instrType, aluControlWord, aluCarryIn);
+	alu_control #(4, INSTR_TYPE, 4) aluControl(aluOpCode, instrType, aluControlWord, aluCarryIn);
 	
 	// Instantiate the ALU and connect it to the datapath.
 	wire [REG_WIDTH-1:0] aluOutput;
-	alu #(REG_WIDTH, REG_ADDR_BITS) alu(
+	alu #(REG_WIDTH, 4) alu(
 		.A(aluInputA),
 		.B(aluInputB),
 		.control_word(aluControlWord),
