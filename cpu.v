@@ -76,7 +76,8 @@ module cpu #(
 	
 	// Instantiate the ALU and connect it to the datapath.
 	wire [REG_WIDTH-1:0] aluOutput;
-	wire aluCarryIn; // Should this be replaced with 'carryFlag'?
+	wire [REG_ADDR_BITS-1:] aluControl;
+	wire aluCarryIn;
 	alu #(REG_WIDTH) alu(
 		.A(aluInputA),
 		.B(aluInputB),
