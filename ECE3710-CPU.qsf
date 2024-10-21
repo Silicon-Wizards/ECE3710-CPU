@@ -71,10 +71,6 @@ set_location_assignment PIN_W16 -to negFlag
 set_location_assignment PIN_V17 -to overflowFlag
 set_location_assignment PIN_V18 -to lowFlag
 set_location_assignment PIN_W17 -to carryFlag
-set_location_assignment PIN_AE11 -to aluControl[0]
-set_location_assignment PIN_AC9 -to aluControl[1]
-set_location_assignment PIN_AD10 -to aluControl[2]
-set_location_assignment PIN_AE12 -to aluControl[3]
 set_location_assignment PIN_AB12 -to regAddressA[0]
 set_location_assignment PIN_AC12 -to regAddressA[1]
 set_location_assignment PIN_AF9 -to regAddressA[2]
@@ -111,4 +107,8 @@ set_location_assignment PIN_AB25 -to sevenSeg4[5]
 set_location_assignment PIN_AB22 -to sevenSeg4[6]
 set_location_assignment PIN_AF14 -to clk
 set_location_assignment PIN_AA15 -to regWriteEnableButton
+set_location_assignment PIN_AE11 -to aluOpCode[0]
+set_location_assignment PIN_AC9 -to aluOpCode[1]
+set_location_assignment PIN_AD10 -to aluOpCode[2]
+set_location_assignment PIN_AE12 -to aluOpCode[3]
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
