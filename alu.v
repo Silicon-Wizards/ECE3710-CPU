@@ -6,7 +6,7 @@
 // ALU control words from the op_codes.
 //
 // Authors:  Kenneth Gordon, Adrian Sucahyo, Bryant Watson, and Inhyup Lee
-// Date:  October 15, 2024
+// Date:  October 21, 2024
 //
 
 module alu_control#(
@@ -80,11 +80,9 @@ module alu_control#(
 				endcase
 			end
 		endcase
-	
 	end
 	
 endmodule
-
 
 module alu #(
 	parameter WIDTH_DATA = 16, 

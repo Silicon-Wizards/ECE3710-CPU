@@ -5,7 +5,7 @@
 // necessary to synthesize the circuit onto the FPGA.
 //
 // Authors:  Kenneth Gordon, Adrian Sucahyo, Bryant Watson, and Inhyup Lee
-// Date:  October 18, 2024
+// Date:  October 21, 2024
 //
 
 module cpu #(
@@ -76,15 +76,15 @@ module cpu #(
 	
 	// Instantiate the ALU_control for ALU input.
 	wire instrType;
-	wire [4-1:0] aluControlWord;
 	wire aluCarryIn;
+	wire [4-1:0] aluControlWord;		
 	
-	assign instrType = 1; // Hardcoded as we don't have enough inputs to make this work
+	assign instrType = 0; // Hardcoded as we don't have enough inputs to make this work
 	alu_control aluControl(aluOpCode, instrType, aluControlWord, aluCarryIn);
 	
 	// Instantiate the ALU and connect it to the datapath.
 	wire [REG_WIDTH-1:0] aluOutput;
-	alu #(REG_WIDTH, 4) alu(
+	alu #(REG_WIDTH) alu(
 		.A(aluInputA),
 		.B(aluInputB),
 		.control_word(aluControlWord),
