@@ -1,10 +1,15 @@
+//
+// tb_alu_control.v
+//
+// This file contains all the implementation for the ALU for use in the ECE3710-CPU project.
+//	The ALU module is defined here, as well as the supplementary ALU control module for generating
+// ALU control words from the op_codes.
+//
+// Authors:  Kenneth Gordon, Adrian Sucahyo, Bryant Watson, and Inhyup Lee
+// Date:  October 15, 2024
+//
+
 module tb_alu_control;
-
-
-	//input [WIDTH_OP_CODE - 1 : 0] op_code,
-	//input [WIDTH_INSTR_TYPE - 1 : 0] instr_type,	// This is determined before sending op code to this controller
-	//output reg [WIDTH_CONTROL - 1 : 0] control_word,
-	//output reg carry_bit
 	parameter WIDTH_INSTR_TYPE = 1;
 	parameter WIDTH_OP_CODE = 4;
 	parameter WIDTH_CONTROL = 4;
@@ -97,7 +102,7 @@ module tb_alu_control;
 		
 		//-------------
 		$display("TEST: OP_CODE_AND");
-		tb_op_code = CONTROL_AND;
+		tb_op_code = OP_CODE_AND;
 		tb_instr_type = INSTR_STATIC;
 		#5;
 		if(tb_control_word != CONTROL_AND || tb_carry_bit != 0)
