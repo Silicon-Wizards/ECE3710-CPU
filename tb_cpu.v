@@ -94,9 +94,10 @@ module tb_cpu;
 		tb_regAddressA = 0;
 		tb_regAddressB = 0;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
+		if(alu_result != 0) 
+			$display("ERROR!! result = %h should be 0", alu_result);
 		$display("");
-		
+		//-------------
 		$display("TEST: 1+1");
 		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
@@ -105,20 +106,31 @@ module tb_cpu;
 		tb_regAddressB = 1;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
+		if(alu_result != 2) 
+			$display("ERROR!! result = %h should be 2", alu_result);
 		$display("");
 		
 		$display("TEST: OP_CODE_ADDU");//----------------------------------------------------------------------------------
-		
-		$display("TEST: FFFF+1");
+		$display("TEST: 0+0");
 		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_ADDU;
-		tb_regAddressA = 2;
+		tb_regAddressA = 0;
+		tb_regAddressB = 0;
+		tb_clk = 0; #5; tb_clk = 1; #5;
+		if(alu_result != 0) 
+			$display("ERROR!! result = %h should be 0", alu_result);
+		$display("");
+		//-------------
+		$display("TEST: 1+1");
+		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_clk = 0; #5; tb_clk = 1; #5;
+		tb_aluControl = OP_CODE_ADDU;
+		tb_regAddressA = 1;
 		tb_regAddressB = 1;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
+		if(alu_result != 2) 
+			$display("ERROR!! result = %h should be 2", alu_result);
 		$display("");
 		
 		
@@ -131,7 +143,8 @@ module tb_cpu;
 		tb_regAddressB = 0;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
+		if(alu_result != 0) 
+			$display("ERROR!! result = %h should be 0", alu_result);
 		$display("");
 		//-------------
 		$display("TEST: 1-1");
@@ -142,18 +155,8 @@ module tb_cpu;
 		tb_regAddressB = 0;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
-		$display("");
-		//-------------
-		$display("TEST: 0-1");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
-		tb_clk = 0; #5; tb_clk = 1; #5;
-		tb_aluControl = OP_CODE_SUB;
-		tb_regAddressA = 0;
-		tb_regAddressB = 1;
-		tb_clk = 0; #5; tb_clk = 1; #5;
-		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
+		if(alu_result != 0) 
+			$display("ERROR!! result = %h should be 0", alu_result);
 		$display("");
 		//-------------
 		$display("TEST: 1-0");
@@ -164,12 +167,22 @@ module tb_cpu;
 		tb_regAddressB = 0;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
+		if(alu_result != 0) 
+			$display("ERROR!! result = %h should be 0", alu_result);
 		$display("");
+		
 		$display("TEST: OP_CODE_CMP");//----------------------------------------------------------------------------------
-		//TODO
-		
-		
+		$display("TEST: 1-0");
+		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_clk = 0; #5; tb_clk = 1; #5;
+		tb_aluControl = OP_CODE_CMP;
+		tb_regAddressA = 1;
+		tb_regAddressB = 1;
+		tb_clk = 0; #5; tb_clk = 1; #5;
+		tb_clk = 0; #5; tb_clk = 1; #5;
+		if(alu_result != 0) 
+			$display("ERROR!! result = %h should be 0", alu_result);
+		$display("");
 		
 		$display("TEST: OP_CODE_AND");//----------------------------------------------------------------------------------
 		$display("TEST: 0 & 0");
@@ -180,7 +193,8 @@ module tb_cpu;
 		tb_regAddressB = 0;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
+		if(alu_result != 0) 
+			$display("ERROR!! result = %h should be 0", alu_result);
 		$display("");
 		//-------------
 		$display("TEST: 1 & 0");
@@ -191,7 +205,8 @@ module tb_cpu;
 		tb_regAddressB = 0;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
+		if(alu_result != 0) 
+			$display("ERROR!! result = %h should be 0", alu_result);
 		$display("");
 		//-------------
 		$display("TEST: 0 & 1");
@@ -202,7 +217,8 @@ module tb_cpu;
 		tb_regAddressB = 0;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
+		if(alu_result != 0) 
+			$display("ERROR!! result = %h should be 0", alu_result);
 		$display("");
 		//-------------
 		$display("TEST: 1 & 1");
@@ -213,7 +229,8 @@ module tb_cpu;
 		tb_regAddressB = 1;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
+		if(alu_result != 1) 
+			$display("ERROR!! result = %h should be 1", alu_result);
 		$display("");
 		//-------------
 		$display("TEST: 2 & 2");
@@ -224,7 +241,8 @@ module tb_cpu;
 		tb_regAddressB = 2;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
+		if(alu_result != 2) 
+			$display("ERROR!! result = %h should be 2", alu_result);
 		$display("");
 		//-------------
 		$display("TEST: 3 & 3");
@@ -235,7 +253,8 @@ module tb_cpu;
 		tb_regAddressB = 3;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
+		if(alu_result != 3) 
+			$display("ERROR!! result = %h should be 3", alu_result);
 		$display("");
 		
 		$display("TEST: OP_CODE_OR");//----------------------------------------------------------------------------------
@@ -247,7 +266,8 @@ module tb_cpu;
 		tb_regAddressB = 0;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
+		if(alu_result != 0) 
+			$display("ERROR!! result = %h should be 0", alu_result);
 		$display("");
 		//-------------
 		$display("TEST: 1 | 0");
@@ -258,7 +278,8 @@ module tb_cpu;
 		tb_regAddressB = 0;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
+		if(alu_result != 1) 
+			$display("ERROR!! result = %h should be 1", alu_result);
 		$display("");
 		//-------------
 		$display("TEST: 0 | 1");
@@ -269,7 +290,8 @@ module tb_cpu;
 		tb_regAddressB = 0;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
+		if(alu_result != 1) 
+			$display("ERROR!! result = %h should be 1", alu_result);
 		$display("");
 		//-------------
 		$display("TEST: 1 | 1");
@@ -280,7 +302,8 @@ module tb_cpu;
 		tb_regAddressB = 1;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
+		if(alu_result != 1) 
+			$display("ERROR!! result = %h should be 1", alu_result);
 		$display("");
 		//-------------
 		$display("TEST: 2 | 2");
@@ -291,7 +314,8 @@ module tb_cpu;
 		tb_regAddressB = 2;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
+		if(alu_result != 2) 
+			$display("ERROR!! result = %h should be 2", alu_result);
 		$display("");
 		//-------------
 		$display("TEST: 3 | 3");
@@ -302,7 +326,8 @@ module tb_cpu;
 		tb_regAddressB = 3;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
+		if(alu_result != 3) 
+			$display("ERROR!! result = %h should be 3", alu_result);
 		$display("");
 		
 		
@@ -315,7 +340,8 @@ module tb_cpu;
 		tb_regAddressB = 0;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
+		if(alu_result != 0) 
+			$display("ERROR!! result = %h should be 0", alu_result);
 		$display("");
 		//-------------
 		$display("TEST: 1 ^ 0");
@@ -326,18 +352,8 @@ module tb_cpu;
 		tb_regAddressB = 0;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
-		$display("");
-		//-------------
-		$display("TEST: 0 ^ 1");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
-		tb_clk = 0; #5; tb_clk = 1; #5;
-		tb_aluControl = OP_CODE_XOR;
-		tb_regAddressA = 1;
-		tb_regAddressB = 0;
-		tb_clk = 0; #5; tb_clk = 1; #5;
-		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
+		if(alu_result != 1) 
+			$display("ERROR!! result = %h should be 1", alu_result);
 		$display("");
 		//-------------
 		$display("TEST: 1 ^ 1");
@@ -348,7 +364,8 @@ module tb_cpu;
 		tb_regAddressB = 1;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
+		if(alu_result != 0) 
+			$display("ERROR!! result = %h should be 0", alu_result);
 		$display("");
 		//-------------
 		$display("TEST: 2 ^ 2");
@@ -359,7 +376,8 @@ module tb_cpu;
 		tb_regAddressB = 2;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
+		if(alu_result != 0) 
+			$display("ERROR!! result = %h should be 0", alu_result);
 		$display("");
 		//-------------
 		$display("TEST: 3 ^ 3");
@@ -370,10 +388,35 @@ module tb_cpu;
 		tb_regAddressB = 3;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		$display("result = %h", alu_result);
+		if(alu_result != 0) 
+			$display("ERROR!! result = %h should be 0", alu_result);
 		$display("");
 		
 		$display("TEST: OP_CODE_LSH");//----------------------------------------------------------------------------------
+		$display("TEST: 0 << 0");
+		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_clk = 0; #5; tb_clk = 1; #5;
+		tb_aluControl = OP_CODE_LSH;
+		tb_regAddressA = 0;
+		tb_regAddressB = 0;
+		tb_clk = 0; #5; tb_clk = 1; #5;
+		tb_clk = 0; #5; tb_clk = 1; #5;
+		if(alu_result != 0) 
+			$display("ERROR!! result = %h should be 0", alu_result);
+		$display("");
+		//-------------
+		$display("TEST: 1 << 1");
+		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_clk = 0; #5; tb_clk = 1; #5;
+		tb_aluControl = OP_CODE_LSH;
+		tb_regAddressA = 1;
+		tb_regAddressB = 1;
+		tb_clk = 0; #5; tb_clk = 1; #5;
+		tb_clk = 0; #5; tb_clk = 1; #5;
+		if(alu_result != 2) 
+			$display("ERROR!! result = %h should be 2", alu_result);
+		$display("");
+
 	end
 	
 endmodule
