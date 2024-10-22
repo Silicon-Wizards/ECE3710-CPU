@@ -96,7 +96,7 @@ module tb_cpu;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		$display("result = %h", alu_result);
 		
-		/**
+		
 		$display("TEST: 1+1");
 		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
@@ -326,7 +326,7 @@ module tb_cpu;
 		$display("result = %h", alu_result);
 		
 		$display("TEST: OP_CODE_LSH");//----------------------------------------------------------------------------------
-		**/
+
 	end
 	
 endmodule
