@@ -11,7 +11,7 @@
 module registerFile #(
 	parameter WIDTH = 16, 
 	parameter ADDR_BITS = 4,
-	parameter FILE_LOCATION = "FILL ME OUT!!"
+	parameter FILE_LOCATION = "X:/Documents/ECE3710/3710-cpu/ECE3710-CPU/reg.dat"
 )(
 	input clk,
 	input writeEnable,

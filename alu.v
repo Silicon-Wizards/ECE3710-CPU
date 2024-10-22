@@ -1,12 +1,12 @@
 //
-// tb_alu.v
+// alu.v
 //
 // This file contains all the implementation for the ALU for use in the ECE3710-CPU project.
 //	The ALU module is defined here, as well as the supplementary ALU control module for generating
 // ALU control words from the op_codes.
 //
 // Authors:  Kenneth Gordon, Adrian Sucahyo, Bryant Watson, and Inhyup Lee
-// Date:  October 15, 2024
+// Date:  October 21, 2024
 //
 
 module alu_control#(
@@ -35,18 +35,17 @@ module alu_control#(
 	localparam OP_CODE_LSH		=	'b0100;
 	localparam OP_CODE_ALSHU	=	'b0110;
 	
-	localparam CONTROL_ADD 	=	'b0000;
-	localparam CONTROL_ADDU	=	'b0001;
-	localparam CONTROL_SUB 	=	'b0010;
-	localparam CONTROL_SUBU	=	'b0011;
-	localparam CONTROL_CMP 	=	'b0100;
-	localparam CONTROL_AND 	=	'b0101;
-	localparam CONTROL_OR 	=	'b0110;
-	localparam CONTROL_XOR	=	'b0111;
+	localparam CONTROL_ADD 	=	'b0;
+	localparam CONTROL_ADDU	=	'b1;
+	localparam CONTROL_SUB 	=	'b10;
+	localparam CONTROL_SUBU	=	'b11;
+	localparam CONTROL_CMP 	=	'b100;
+	localparam CONTROL_AND 	=	'b101;
+	localparam CONTROL_OR 	=	'b110;
+	localparam CONTROL_XOR	=	'b111;
 	localparam CONTROL_LSH 	=	'b1000;
 	
 	always @(*) begin
-		control_word <= 'b1111;
 		carry_bit <= 0;
 		
 		case (instr_type)
@@ -67,23 +66,23 @@ module alu_control#(
 					OP_CODE_AND		: control_word <= CONTROL_AND;	// AND is normal
 					OP_CODE_OR		: control_word <= CONTROL_OR;		// OR is normal
 					OP_CODE_XOR		: control_word <= CONTROL_XOR;	// XOR is normal
+					default : control_word <= 'b1111;
 				endcase
 			end
 			INSTR_SHIFT : begin
 				case (op_code)
 					OP_CODE_LSH		: control_word <= CONTROL_LSH;	// LSH is normal
 					OP_CODE_ALSHU	: begin
-						control_word <= CONTROL_LSH;						// ALSH is normal and uses carry bit for RSH
+						control_word <= CONTROL_LSH;						// ALSH is normal and uses carry bit for RSH in bit
 						carry_bit <= 'b1;
 					end
+					default : control_word <= 'b1111;
 				endcase
 			end
 		endcase
-	
 	end
 	
 endmodule
-
 
 module alu #(
 	parameter WIDTH_DATA = 16, 
@@ -131,8 +130,7 @@ module alu #(
 	// NEGATIVE
 	assign neg_flag = adder_diff[WIDTH_DATA];
 		
-	always @(*) 
-		begin
+	always @(*) begin
 		// Set the defaults
 		carry_out <= 0;
 		low_out <= 0;
@@ -142,23 +140,19 @@ module alu #(
 		case (control_word)
 			// Arithmetic Operations
 			CONTROL_ADD : begin
-				$display("CONTROL_ADD regA: %h + regB %h = %h", A, B, adder_sum);
 				result <= (adder_sum[WIDTH_DATA - 1 : 0] + carry_in);
 				over_out <= carry_in ? adder_sum[WIDTH_DATA - 1 : 0] == 'h7FFF : over_flag_sum;
 				neg_out <= result[WIDTH_DATA - 1];
 			end
 			CONTROL_ADDU : begin
-				$display("CONTROL_ADDU regA: %h + regB %h = %h", A, B, adder_sum);
 				{carry_out, result} <= adder_sum + carry_in;
 			end
 			CONTROL_SUB : begin
-				$display("CONTROL_SUB regA: %h - regB %h = %h", A, B, adder_diff);
 				result <= (adder_diff[WIDTH_DATA - 1 : 0] - carry_in);
 				over_out <= carry_in ? adder_diff[WIDTH_DATA - 1 : 0] == 'h8000 : over_flag_diff;
 				neg_out <= result[WIDTH_DATA - 1];
 			end
 			CONTROL_SUBU : begin
-				$display("CONTROL_SUBU regA: %h - regB %h = %h", A, B, adder_diff);
 				{carry_out, result} <= adder_diff - carry_in;
 			end
 			
@@ -169,15 +163,12 @@ module alu #(
 			end
 			CONTROL_AND : begin
 				result <= A & B;
-				$display("CONTROL_AND regA: %h & regB %h = %h", A, B, result);
 			end
 			CONTROL_OR	: begin
 				result <= A | B;
-				$display("CONTROL_OR regA: %h | regB %h = %h", A, B, result);
 			end
 			CONTROL_XOR : begin
 				result <= A ^ B;
-				$display("CONTROL_XOR regA: %h ^ regB %h = %h", A, B, result);
 			end
 			
 			// Shifting Operations
@@ -190,12 +181,11 @@ module alu #(
 				end
 				
 			end
-			default : begin result <= 0; end
+			default : begin result <= 'hAAAA; end
 		endcase
 		
 		// Update the ZERO output register
 		zero_out <= zero_flag;
-		
 	end
 	
 endmodule
