@@ -13,7 +13,7 @@ module tb_cpu;
 	//cpu param
 	parameter REG_WIDTH = 16;
 	parameter REG_ADDR_BITS = 3; // Changed from 4 to 3 for synthesis as we don't have enough pins for 4.
-	parameter FILE_LOCATION = "D:/Classwork/ECE 3710/Projects/ECE3710-CPU/reg.dat"; // Load a register file with values for FPGA testing.
+	parameter FILE_LOCATION = "X:/Documents/ECE3710/3710-cpu/ECE3710-CPU/reg.dat"; // Load a register file with values for FPGA testing.
 	//OP codes
 	localparam OP_CODE_ADD		=	'b0101;
 	localparam OP_CODE_ADDU		=	'b0110;
@@ -88,7 +88,7 @@ module tb_cpu;
 		
 		$display("TEST: OP_CODE_ADD");//----------------------------------------------------------------------------------
 		$display("TEST: 0+0");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_ADD;
 		tb_regAddressA = 0;
@@ -99,7 +99,7 @@ module tb_cpu;
 		$display("");
 		//-------------
 		$display("TEST: 1+1");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_ADD;
 		tb_regAddressA = 1;
@@ -112,7 +112,7 @@ module tb_cpu;
 		
 		$display("TEST: OP_CODE_ADDU");//----------------------------------------------------------------------------------
 		$display("TEST: 0+0");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_ADDU;
 		tb_regAddressA = 0;
@@ -124,7 +124,7 @@ module tb_cpu;
 		$display("");
 		//-------------
 		$display("TEST: 1+1");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_ADDU;
 		tb_regAddressA = 1;
@@ -138,7 +138,7 @@ module tb_cpu;
 		
 		$display("TEST: OP_CODE_SUB");//----------------------------------------------------------------------------------
 		$display("TEST: 0-0");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_SUB;
 		tb_regAddressA = 0;
@@ -150,7 +150,7 @@ module tb_cpu;
 		$display("");
 		//-------------
 		$display("TEST: 1-1");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_SUB;
 		tb_regAddressA = 0;
@@ -162,7 +162,7 @@ module tb_cpu;
 		$display("");
 		//-------------
 		$display("TEST: 1-0");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_SUB;
 		tb_regAddressA = 1;
@@ -175,7 +175,7 @@ module tb_cpu;
 		
 		$display("TEST: OP_CODE_CMP");//----------------------------------------------------------------------------------
 		$display("TEST: 1-0");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_CMP;
 		tb_regAddressA = 1;
@@ -188,7 +188,7 @@ module tb_cpu;
 		
 		$display("TEST: OP_CODE_AND");//----------------------------------------------------------------------------------
 		$display("TEST: 0 & 0");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_AND;
 		tb_regAddressA = 0;
@@ -200,7 +200,7 @@ module tb_cpu;
 		$display("");
 		//-------------
 		$display("TEST: 1 & 0");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_AND;
 		tb_regAddressA = 1;
@@ -212,7 +212,7 @@ module tb_cpu;
 		$display("");
 		//-------------
 		$display("TEST: 0 & 1");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_AND;
 		tb_regAddressA = 1;
@@ -224,7 +224,7 @@ module tb_cpu;
 		$display("");
 		//-------------
 		$display("TEST: 1 & 1");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_AND;
 		tb_regAddressA = 1;
@@ -236,7 +236,7 @@ module tb_cpu;
 		$display("");
 		//-------------
 		$display("TEST: 2 & 2");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_AND;
 		tb_regAddressA = 2;
@@ -248,7 +248,7 @@ module tb_cpu;
 		$display("");
 		//-------------
 		$display("TEST: 3 & 3");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_AND;
 		tb_regAddressA = 3;
@@ -261,7 +261,7 @@ module tb_cpu;
 		
 		$display("TEST: OP_CODE_OR");//----------------------------------------------------------------------------------
 		$display("TEST: 0 | 0");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_OR;
 		tb_regAddressA = 0;
@@ -273,7 +273,7 @@ module tb_cpu;
 		$display("");
 		//-------------
 		$display("TEST: 1 | 0");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_OR;
 		tb_regAddressA = 1;
@@ -285,7 +285,7 @@ module tb_cpu;
 		$display("");
 		//-------------
 		$display("TEST: 0 | 1");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_OR;
 		tb_regAddressA = 1;
@@ -297,7 +297,7 @@ module tb_cpu;
 		$display("");
 		//-------------
 		$display("TEST: 1 | 1");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_OR;
 		tb_regAddressA = 1;
@@ -309,7 +309,7 @@ module tb_cpu;
 		$display("");
 		//-------------
 		$display("TEST: 2 | 2");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_OR;
 		tb_regAddressA = 2;
@@ -321,7 +321,7 @@ module tb_cpu;
 		$display("");
 		//-------------
 		$display("TEST: 3 | 3");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_OR;
 		tb_regAddressA = 3;
@@ -335,7 +335,7 @@ module tb_cpu;
 		
 		$display("TEST: OP_CODE_XOR");//----------------------------------------------------------------------------------
 		$display("TEST: 0 ^ 0");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_XOR;
 		tb_regAddressA = 0;
@@ -347,7 +347,7 @@ module tb_cpu;
 		$display("");
 		//-------------
 		$display("TEST: 1 ^ 0");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_XOR;
 		tb_regAddressA = 1;
@@ -359,7 +359,7 @@ module tb_cpu;
 		$display("");
 		//-------------
 		$display("TEST: 1 ^ 1");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_XOR;
 		tb_regAddressA = 1;
@@ -371,7 +371,7 @@ module tb_cpu;
 		$display("");
 		//-------------
 		$display("TEST: 2 ^ 2");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_XOR;
 		tb_regAddressA = 2;
@@ -383,7 +383,7 @@ module tb_cpu;
 		$display("");
 		//-------------
 		$display("TEST: 3 ^ 3");
-		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
+		tb_reset = 1; #5; tb_reset = 0; #5; tb_reset = 1; #5;//reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_aluControl = OP_CODE_XOR;
 		tb_regAddressA = 3;
