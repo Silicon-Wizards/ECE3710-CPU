@@ -13,7 +13,7 @@ module tb_cpu;
 	//cpu param
 	parameter REG_WIDTH = 16;
 	parameter REG_ADDR_BITS = 3; // Changed from 4 to 3 for synthesis as we don't have enough pins for 4.
-	parameter FILE_LOCATION = "X:/Documents/ECE3710/3710-cpu/ECE3710-CPU/reg.dat"; // Load a register file with values for FPGA testing.
+	parameter FILE_LOCATION = "D:/Classwork/ECE 3710/Projects/ECE3710-CPU/reg.dat"; // Load a register file with values for FPGA testing.
 	//OP codes
 	localparam OP_CODE_ADD		=	'b0101;
 	localparam OP_CODE_ADDU		=	'b0110;
