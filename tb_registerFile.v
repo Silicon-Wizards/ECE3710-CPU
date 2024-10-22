@@ -6,7 +6,7 @@ module tb_registerFile;
 	integer i;
 	parameter WIDTH = 16;
 	parameter ADDR_BITS = 4;
-	parameter FILE_LOCATION = "X:/Documents/ECE3710/3710-cpu/ECE3710-CPU/reg.dat";
+	parameter FILE_LOCATION = "D:/Classwork/ECE 3710/Projects/ECE3710-CPU/reg.dat";
 	
 	reg 						tb_clk;				// input clk,
 	reg 						tb_writeEnable;	// input writeEnable,
