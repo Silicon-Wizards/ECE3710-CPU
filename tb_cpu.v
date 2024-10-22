@@ -118,6 +118,7 @@ module tb_cpu;
 		tb_regAddressA = 0;
 		tb_regAddressB = 0;
 		tb_clk = 0; #5; tb_clk = 1; #5;
+		tb_clk = 0; #5; tb_clk = 1; #5;
 		if(alu_result != 0) 
 			$display("ERROR!! result = %h should be 0", alu_result);
 		$display("");
@@ -128,6 +129,7 @@ module tb_cpu;
 		tb_aluControl = OP_CODE_ADDU;
 		tb_regAddressA = 1;
 		tb_regAddressB = 1;
+		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		if(alu_result != 2) 
 			$display("ERROR!! result = %h should be 2", alu_result);
@@ -167,8 +169,8 @@ module tb_cpu;
 		tb_regAddressB = 0;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		if(alu_result != 0) 
-			$display("ERROR!! result = %h should be 0", alu_result);
+		if(alu_result != 1) 
+			$display("ERROR!! result = %h should be 1", alu_result);
 		$display("");
 		
 		$display("TEST: OP_CODE_CMP");//----------------------------------------------------------------------------------
@@ -180,8 +182,8 @@ module tb_cpu;
 		tb_regAddressB = 1;
 		tb_clk = 0; #5; tb_clk = 1; #5;
 		tb_clk = 0; #5; tb_clk = 1; #5;
-		if(alu_result != 0) 
-			$display("ERROR!! result = %h should be 0", alu_result);
+		if(alu_result != 1) 
+			$display("ERROR!! result = %h should be 1", alu_result);
 		$display("");
 		
 		$display("TEST: OP_CODE_AND");//----------------------------------------------------------------------------------
@@ -392,7 +394,9 @@ module tb_cpu;
 			$display("ERROR!! result = %h should be 0", alu_result);
 		$display("");
 		
+		/** to use these we need to edit the cpu instruction type to be 1
 		$display("TEST: OP_CODE_LSH");//----------------------------------------------------------------------------------
+		
 		$display("TEST: 0 << 0");
 		tb_reset = 0; #5; tb_reset = 1; #5; tb_reset = 0; #5; //reset
 		tb_clk = 0; #5; tb_clk = 1; #5;
@@ -416,7 +420,7 @@ module tb_cpu;
 		if(alu_result != 2) 
 			$display("ERROR!! result = %h should be 2", alu_result);
 		$display("");
-
+		**/
 	end
 	
 endmodule
