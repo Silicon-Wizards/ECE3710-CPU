@@ -27,6 +27,7 @@ module cpu #(
 	// This is because we simply don't have enough outputs for this value on the board.
 	// Keeping it will actually break the FPGA's displays (it will display wrong info).
 	wire [REG_WIDTH-1:0] aluRegOutput;
+	wire [REG_WIDTH-1:0] aluOutput;
 
 	// Instantiate the source address register.
 	wire srcAddressRegEnable;
@@ -83,7 +84,6 @@ module cpu #(
 	alu_control aluControl(aluOpCode, instrType, aluControlWord, aluCarryIn);
 	
 	// Instantiate the ALU and connect it to the datapath.
-	wire [REG_WIDTH-1:0] aluOutput;
 	alu #(REG_WIDTH) alu(
 		.A(aluInputA),
 		.B(aluInputB),
