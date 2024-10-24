@@ -42,6 +42,74 @@ module cpu #(
 	// RF Wires
 	wire [REG_WIDTH-1:0] muxrf_to_rf_datain, rf_areg_to_muxa_muximm_mem_datain,
 								rf_breg_to_muxb_muxpc_muxrf, rf_areg_aluimmz_to_muxrf;
+								
+	// // ALU Unit \\ \\
+	
+	mux2 muxA(
+		.select(), // Needs a wire...
+		.dataA(rf_areg_to_muxa_muximm_mem_datain),
+		.dataB(pc_to_muxa_muxmem),
+		.dataOut(muxa_data_to_alua)
+	);
+	
+	mux4 muxB(
+		.select(), // Needs a wire...
+		.dataA(rf_breg_to_muxb_muxpc_muxrf),
+		.dataB(alu_imml_to_muxb_muxrfimm),
+		.dataC(alu_imma_to_muxb),
+		.dataD(16'b0000000000000001),
+		.dataOut(muxb_data_to_alub)
+	);
+	
+	mux2 #(4) mux_op_alu(
+		.select(), // Needs a wire...
+		.dataA(instr_ir_op_imm_to_muxopalu_sign),
+		.dataB(instr_ir_op_to_muxopalu),
+		.dataOut(instr_aluopmux_to_alucontrol)
+	);
+	
+	alu_control alu_controller(
+		.op_code(instr_aluopmux_to_alucontrol),
+		.instr_type(), // Needs a wire...
+		.control_word(alucontrol_op_to_alu),
+		.carry_bit(alucontrol_cin_to_alu)
+	);
+	
+	alu alu(
+		.A(muxa_data_to_alua),
+		.B(muxb_data_to_alub),
+		.control_word(alucontrol_op_to_alu),
+		.carry_in(alucontrol_cin_to_alu),
+		.result(alu_result_to_muxrf_muxpc),
+		.carry_out(alu_flag_to_fsm[0]),
+		.low_out(alu_flag_to_fsm[1]),
+		.over_out(alu_flag_to_fsm[2]),
+		.neg_out(alu_flag_to_fsm[3]),
+		.zero_out(alu_flag_to_fsm[4])
+	);
+	
+	// // Immediate Calculation Area \\ \\
+	
+	assign alu_imma_to_muxb = {{6{1'b10}}, ir_instr_src_to_muxmem_rf_baddr_sign}; // Replace the {6{1'b10}} with the sign extender's output when it is made.
+	assign alu_imml_to_muxb_muxrfimm = {{8{1'b0}}, alu_immz_to_muxrfimm};
+	assign alu_immz_to_muxrfimm = {instr_ir_op_imm_to_muxopalu_sign, ir_instr_src_to_muxmem_rf_baddr_sign};
+	
+	// // Program Counter \\ \\
+	
+	mux2 muxPC(
+		.select(), // Needs a wire...
+		.dataA(alu_result_to_muxrf_muxpc),
+		.dataB(rf_breg_to_muxb_muxpc_muxrf),
+		.dataOut(muxpc_to_pc)
+	);
+	
+	flopenr pc(
+		.clk(clk),
+		.reset(reset),
+		.enable(), // Needs a wire...
+		.dataIn(muxpc_to_pc),
+		.dataOut(pc_to_muxa_muxmem)
+	);
 	
 	// Control Wires
 	wire rf_we;
