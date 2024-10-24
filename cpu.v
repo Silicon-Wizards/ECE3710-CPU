@@ -81,4 +81,27 @@ module cpu #(
 		.readData2(rf_breg_to_muxb_muxpc_muxrf)
 	);
 	
+	signExtender #(
+		REG_ADDR_BITS,
+		REG_WIDTH - REG_ADDR_BITS
+	)
+	sign
+	(
+		.input_data(instr_ir_op_imm_to_muxopalu_sign),
+		.output_data(alu_imma_to_muxb[15:4])
+	);
+	
+endmodule
+
+
+module signExtender #(
+	parameter INPUT_WIDTH,
+	parameter OUTPUT_WIDTH
+)(
+	input [INPUT_WIDTH - 1: 0] input_data,
+	output [OUTPUT_WIDTH - 1: 0] output_data
+);
+
+	assign output_data = {{(OUTPUT_WIDTH - INPUT_WIDTH){input_data[INPUT_WIDTH - 1]}}, input_data};
+
 endmodule
