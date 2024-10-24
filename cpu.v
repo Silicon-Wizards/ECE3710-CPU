@@ -49,6 +49,9 @@ module cpu #(
 	// ALU Control Wires
 	
 	
+	// Instruction Control Wires
+	wire ir_we;
+	
 	// Memory Control Wires
 	
 	
@@ -129,6 +132,20 @@ module cpu #(
 	assign alu_imml_to_muxb_muxrfimm = {{8{1'b0}}, alu_immz_to_muxrfimm};
 	assign alu_imma_to_muxb[3:0] = instr_ir_src_to_muxmem_rf_baddr_sign;
 	
+	// // Instruction Register \\ \\
+	
+	flopenr ir(
+		.clk(clk),
+		.reset(reset),
+		.enable(ir_we),
+		.dataIn(mem_dataout_to_ir_muxrf),
+		.dataOut(instr_ir_to_fsm)
+	);
+	
+	assign instr_ir_op_to_muxopalu = 					instr_ir_to_fsm[15:12];
+	assign instr_ir_dest_to_rf_aaddr = 					instr_ir_to_fsm[11:8];
+	assign instr_ir_op_imm_to_muxopalu_sign =			instr_ir_to_fsm[7:4]; 
+	assign instr_ir_src_to_muxmem_rf_baddr_sign = 	instr_ir_to_fsm[3:0];
 
 	
 	// // Program Counter \\ \\
@@ -185,7 +202,7 @@ module cpu #(
 	
 	// MOVI / LUI Immediate Calculation
 	
-	assign rf_areg_aluimmz_to_muxrfimm = (alu_immz_to_muxrfimm << 8) | rf_areg_to_muxa_muxrfimm_mem_datain[7:0];
+	assign rf_areg_aluimmz_to_muxrfimm = {alu_immz_to_muxrfimm, rf_areg_to_muxa_muxrfimm_mem_datain[7:0]};
 	
 	// Register File Immediate Data MUX ( NAME = "muxrfimm" )
 	mux2 #(
