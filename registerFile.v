@@ -13,11 +13,11 @@ module registerFile #(
 	parameter ADDR_BITS = 4,
 	parameter FILE_LOCATION = "FILL ME OUT!!"
 )(
-	input clk,
-	input writeEnable,
-	input  [ADDR_BITS-1:0] address1, address2,
-	input  [WIDTH-1:0] writeData,
-	output [WIDTH-1:0] readData1, readData2
+	input 						clk,
+	input 						writeEnable,
+	input  [ADDR_BITS-1:0] 	address1, address2,
+	input  [WIDTH-1:0] 		writeData,
+	output [WIDTH-1:0] 		readData1, readData2
 );
 	// Create the RAM block that will hold the register file.
 	reg  [WIDTH-1:0] RAM [(1<<ADDR_BITS)-1:0];
