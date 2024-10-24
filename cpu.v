@@ -88,4 +88,21 @@ module cpu #(
 		.zero_out(alu_flag_to_fsm[4])
 	);
 	
+	// // Program Counter \\ \\
+	
+	mux2 muxPC(
+		.select(), // Needs a wire...
+		.dataA(alu_result_to_muxrf_muxpc),
+		.dataB(rf_breg_to_muxb_muxpc_muxrf),
+		.dataOut(muxpc_to_pc)
+	);
+	
+	flopenr pc(
+		.clk(clk),
+		.reset(reset),
+		.enable(), // Needs a wire...
+		.dataIn(muxpc_to_pc),
+		.dataOut(pc_to_muxa_muxmem)
+	);
+	
 endmodule
