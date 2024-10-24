@@ -23,27 +23,27 @@ module alu_control#(
 	localparam INSTR_STATIC		= 'b0;
 	localparam INSTR_SHIFT		= 'b1;
 	
-	localparam OP_CODE_ADD		=	'b0101;
-	localparam OP_CODE_ADDU		=	'b0110;
-	localparam OP_CODE_ADDC		=	'b0111;
-	localparam OP_CODE_SUB		=	'b1001;
-	localparam OP_CODE_SUBC		= 	'b1010;
-	localparam OP_CODE_CMP		=	'b1011;
-	localparam OP_CODE_AND		=	'b0001;
-	localparam OP_CODE_OR		=	'b0010;
-	localparam OP_CODE_XOR		=	'b0011;
-	localparam OP_CODE_LSH		=	'b0100;
-	localparam OP_CODE_ALSHU	=	'b0110;
+	localparam OP_CODE_ADD		=	4'b0101;
+	localparam OP_CODE_ADDU		=	4'b0110;
+	localparam OP_CODE_ADDC		=	4'b0111;
+	localparam OP_CODE_SUB		=	4'b1001;
+	localparam OP_CODE_SUBC		= 	4'b1010;
+	localparam OP_CODE_CMP		=	4'b1011;
+	localparam OP_CODE_AND		=	4'b0001;
+	localparam OP_CODE_OR		=	4'b0010;
+	localparam OP_CODE_XOR		=	4'b0011;
+	localparam OP_CODE_LSH		=	4'b0100;
+	localparam OP_CODE_ALSHU	=	4'b0110;
 	
-	localparam CONTROL_ADD 	=	'b0;
-	localparam CONTROL_ADDU	=	'b1;
-	localparam CONTROL_SUB 	=	'b10;
-	localparam CONTROL_SUBU	=	'b11;
-	localparam CONTROL_CMP 	=	'b100;
-	localparam CONTROL_AND 	=	'b101;
-	localparam CONTROL_OR 	=	'b110;
-	localparam CONTROL_XOR	=	'b111;
-	localparam CONTROL_LSH 	=	'b1000;
+	localparam CONTROL_ADD 	=	4'b0000;
+	localparam CONTROL_ADDU	=	4'b0001;
+	localparam CONTROL_SUB 	=	4'b0010;
+	localparam CONTROL_SUBU	=	4'b0011;
+	localparam CONTROL_CMP 	=	4'b0100;
+	localparam CONTROL_AND 	=	4'b0101;
+	localparam CONTROL_OR 	=	4'b0110;
+	localparam CONTROL_XOR	=	4'b0111;
+	localparam CONTROL_LSH 	=	4'b1000;
 	
 	always @(*) begin
 		carry_bit <= 0;
@@ -136,6 +136,8 @@ module alu #(
 		low_out <= 0;
 		over_out <= 0;
 		neg_out <= 0;
+		
+		result <= 0;
 						
 		case (control_word)
 			// Arithmetic Operations
@@ -175,7 +177,7 @@ module alu #(
 			// Shifting assumes A is Rdest, B is Ramount
 			CONTROL_LSH	: begin
 				if (B[WIDTH_DATA - 1] == 1'b1) begin
-					result <= {carry_in, A} >> inv_B;
+					result <= ({carry_in, A} >> inv_B);
 				end else begin
 					result <= A << B;
 				end
