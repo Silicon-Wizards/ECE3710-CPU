@@ -5,7 +5,7 @@
 // necessary to synthesize the circuit onto the FPGA.
 //
 // Authors:  Kenneth Gordon, Adrian Sucahyo, Bryant Watson, and Inhyup Lee
-// Date:  October 28, 2024
+// Date:  October 24, 2024
 //
 
 module cpu #(
@@ -17,7 +17,7 @@ module cpu #(
 	input clk, reset
 );
 
-	// // Common Wire Definitions \\ \\
+	// // COMMON WIRE DEFINITIONS \\ \\
 	
 	// ALU Wires
 	wire alucontrol_cin_to_alu;
@@ -42,39 +42,37 @@ module cpu #(
 	// RF Wires
 	wire [REG_WIDTH-1:0] muxrf_to_rf_datain, rf_areg_to_muxa_muxrfimm_mem_datain,
 								rf_breg_to_muxb_muxpc_muxrf, rf_areg_aluimmz_to_muxrfimm;
-								
-	
-	// // Control Wires \\ \\
+		
+		
+	// // CONTROL WIRES \\ \\
 	
 	// ALU Control Wires
-	
-	
+	wire alu_controller_instr_type, muxA_select, muxB_select, muxopalu_select;
+
 	// Instruction Control Wires
 	wire ir_we;
 	
 	// Memory Control Wires
 	
-	
 	// PC Control Wires
-	
+	wire muxPC_select, pc_enable;
 	
 	// RF Control Wires
-	wire rf_we;
-	wire muxrfimm_select;
 	wire [1:0] muxrf_select;
+	wire muxrfimm_select, rf_we;
 	
 	
-	// // ALU Unit \\ \\
-	
+	// // ALU UNIT \\ \\
+		
 	mux2 muxA(
-		.select(), // Needs a wire...
+		.select(muxA_select),
 		.dataA(rf_areg_to_muxa_muxrfimm_mem_datain),
 		.dataB(pc_to_muxa_muxmem),
 		.dataOut(muxa_data_to_alua)
 	);
 	
 	mux4 muxB(
-		.select(), // Needs a wire...
+		.select(muxB_select),
 		.dataA(rf_breg_to_muxb_muxpc_muxrf),
 		.dataB(alu_imml_to_muxb_muxrfimm),
 		.dataC(alu_imma_to_muxb),
@@ -83,7 +81,7 @@ module cpu #(
 	);
 	
 	mux2 #(4) muxopalu(
-		.select(), // Needs a wire...
+		.select(muxopalu_select),
 		.dataA(instr_ir_op_imm_to_muxopalu_sign),
 		.dataB(instr_ir_op_to_muxopalu),
 		.dataOut(instr_aluopmux_to_alucontrol)
@@ -91,7 +89,7 @@ module cpu #(
 	
 	alu_control alu_controller(
 		.op_code(instr_aluopmux_to_alucontrol),
-		.instr_type(), // Needs a wire...
+		.instr_type(alu_controller_instr_type),
 		.control_word(alucontrol_op_to_alu),
 		.carry_bit(alucontrol_cin_to_alu)
 	);
@@ -110,29 +108,19 @@ module cpu #(
 	);
 	
 	
+	// // IMMEDIATE CALCULATION AREA \\ \\
 	
-	
-	// // Immediate Calculation Area \\ \\
-	
-//	assign alu_imma_to_muxb = {{6{1'b10}}, instr_ir_src_to_muxmem_rf_baddr_sign}; // Replace the {6{1'b10}} with the sign extender's output when it is made.
-//	assign alu_imml_to_muxb_muxrfimm = {{8{1'b0}}, alu_immz_to_muxrfimm};
-//	assign alu_immz_to_muxrfimm = {instr_ir_op_imm_to_muxopalu_sign, instr_ir_src_to_muxmem_rf_baddr_sign};
-	
-	signExtender #(
-		REG_ADDR_BITS,
-		REG_WIDTH - REG_ADDR_BITS
-	)
-	sign
-	(
+	signExtender #(REG_ADDR_BITS, REG_WIDTH - REG_ADDR_BITS) sign_extend(
 		.input_data(instr_ir_op_imm_to_muxopalu_sign),
 		.output_data(alu_imma_to_muxb[15:4])
 	);
 	
-	assign alu_immz_to_muxrfimm = {instr_ir_op_imm_to_muxopalu_sign, instr_ir_src_to_muxmem_rf_baddr_sign};
-	assign alu_imml_to_muxb_muxrfimm = {{8{1'b0}}, alu_immz_to_muxrfimm};
 	assign alu_imma_to_muxb[3:0] = instr_ir_src_to_muxmem_rf_baddr_sign;
-	
-	// // Instruction Register \\ \\
+	assign alu_imml_to_muxb_muxrfimm = {{8{1'b0}}, alu_immz_to_muxrfimm};
+	assign alu_immz_to_muxrfimm = {instr_ir_op_imm_to_muxopalu_sign, instr_ir_src_to_muxmem_rf_baddr_sign};
+		
+		
+	// // INSTRUCTION REGISTER \\ \\
 	
 	flopenr ir(
 		.clk(clk),
@@ -142,16 +130,16 @@ module cpu #(
 		.dataOut(instr_ir_to_fsm)
 	);
 	
-	assign instr_ir_op_to_muxopalu = 					instr_ir_to_fsm[15:12];
-	assign instr_ir_dest_to_rf_aaddr = 					instr_ir_to_fsm[11:8];
-	assign instr_ir_op_imm_to_muxopalu_sign =			instr_ir_to_fsm[7:4]; 
-	assign instr_ir_src_to_muxmem_rf_baddr_sign = 	instr_ir_to_fsm[3:0];
+	assign instr_ir_src_to_muxmem_rf_baddr_sign = instr_ir_to_fsm[3:0];
+	assign instr_ir_op_imm_to_muxopalu_sign     = instr_ir_to_fsm[7:4]; 
+	assign instr_ir_dest_to_rf_aaddr            = instr_ir_to_fsm[11:8];
+	assign instr_ir_op_to_muxopalu              = instr_ir_to_fsm[15:12];
 
 	
-	// // Program Counter \\ \\
+	// // PROGRAM COUNTER \\ \\
 	
 	mux2 muxPC(
-		.select(), // Needs a wire...
+		.select(muxPC_select),
 		.dataA(alu_result_to_muxrf_muxpc),
 		.dataB(rf_breg_to_muxb_muxpc_muxrf),
 		.dataOut(muxpc_to_pc)
@@ -160,21 +148,16 @@ module cpu #(
 	flopenr pc(
 		.clk(clk),
 		.reset(reset),
-		.enable(), // Needs a wire...
+		.enable(pc_enable),
 		.dataIn(muxpc_to_pc),
 		.dataOut(pc_to_muxa_muxmem)
 	);
 
 	
-	
 	// // REGISTER FILE \\ \\
 	
 	// Register File Data In MUX ( NAME = "muxrf" )
-	mux4 #(
-		REG_WIDTH
-	)
-		muxrf
-	(
+	mux4 #(REG_WIDTH) muxrf (
 		.select(muxrf_select),
 		.dataA(alu_result_to_muxrf_muxpc),
 		.dataB(mem_dataout_to_ir_muxrf),
@@ -184,13 +167,7 @@ module cpu #(
 	);
 	
 	// Register File ( NAME = "rf" )
-	registerFile #(
-		REG_WIDTH,
-		REG_ADDR_BITS,
-		REG_FILE_LOCATION
-	)
-		rf
-	(
+	registerFile #(REG_WIDTH, REG_ADDR_BITS, REG_FILE_LOCATION)	rf (
 		.clk(clk),
 		.writeEnable(rf_we),
 		.address1(instr_ir_dest_to_rf_aaddr),
@@ -201,23 +178,17 @@ module cpu #(
 	);
 	
 	// MOVI / LUI Immediate Calculation
-	
-	assign rf_areg_aluimmz_to_muxrfimm = {alu_immz_to_muxrfimm, rf_areg_to_muxa_muxrfimm_mem_datain[7:0]};
+	assign rf_areg_aluimmz_to_muxrfimm = {alu_immz_to_muxrfimm, rf_areg_to_muxa_muxrfimm_mem_datain[7:0]}; // Potential size mismatch error
 	
 	// Register File Immediate Data MUX ( NAME = "muxrfimm" )
-	mux2 #(
-		REG_WIDTH
-	)
-		muxrfimm
-	(
+	mux2 #(REG_WIDTH)	muxrfimm (
 		.select(muxrfimm_select),
 		.dataA(alu_imml_to_muxb_muxrfimm),
 		.dataB(rf_areg_aluimmz_to_muxrfimm),
 		.dataOut(muxrfimm_to_muxrf)
 	);
 	
-endmodule
-
+endmodule // cpu
 
 module signExtender #(
 	parameter INPUT_WIDTH,
@@ -229,4 +200,4 @@ module signExtender #(
 
 	assign output_data = {{(OUTPUT_WIDTH - INPUT_WIDTH){input_data[INPUT_WIDTH - 1]}}, input_data};
 
-endmodule
+endmodule // signExtender
