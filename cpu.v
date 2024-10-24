@@ -43,4 +43,42 @@ module cpu #(
 	wire [REG_WIDTH-1:0] muxrf_to_rf_datain, rf_areg_to_muxa_muximm_mem_datain,
 								rf_breg_to_muxb_muxpc_muxrf, rf_areg_aluimmz_to_muxrf;
 	
+	// Control Wires
+	wire rf_we;
+	wire [1:0] muxrf_select;
+
+	
+	// // REGISTER FILE \\ \\
+	
+	// Register File Data In MUX ( NAME = "muxrf" )
+	mux4 #(
+		REG_WIDTH
+	)
+		muxrf
+	(
+		.select(muxrf_select),
+		.dataA(alu_result_to_muxrf_muxpc),
+		.dataB(mem_dataout_to_ir_muxrf),
+		.dataC(rf_breg_to_muxb_muxpc_muxrf),
+		.dataD(muxrfimm_to_muxrf),
+		.dataOut(muxrf_to_rf_datain)
+	);
+	
+	// Register File ( NAME = "rf" )
+	registerFile #(
+		REG_WIDTH,
+		REG_ADDR_BITS,
+		REG_FILE_LOCATION
+	)
+		rf
+	(
+		.clk(clk),
+		.writeEnable(rf_we),
+		.address1(instr_ir_dest_to_rf_aaddr),
+		.address2(ir_instr_src_to_muxmem_rf_baddr_sign),
+		.writeData(muxrf_to_rf_datain),
+		.readData1(rf_areg_to_muxa_muximm_mem_datain),
+		.readData2(rf_breg_to_muxb_muxpc_muxrf)
+	);
+	
 endmodule
