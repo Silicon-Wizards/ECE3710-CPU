@@ -88,6 +88,12 @@ module cpu #(
 		.zero_out(alu_flag_to_fsm[4])
 	);
 	
+	// // Immediate Calculation Area \\ \\
+	
+	assign alu_imma_to_muxb = {{6{1'b10}}, ir_instr_src_to_muxmem_rf_baddr_sign}; // Replace the {6{1'b10}} with the sign extender's output when it is made.
+	assign alu_imml_to_muxb_muxrfimm = {{8{1'b0}}, alu_immz_to_muxrfimm};
+	assign alu_immz_to_muxrfimm = {instr_ir_op_imm_to_muxopalu_sign, ir_instr_src_to_muxmem_rf_baddr_sign};
+	
 	// // Program Counter \\ \\
 	
 	mux2 muxPC(
