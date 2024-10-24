@@ -42,5 +42,50 @@ module cpu #(
 	// RF Wires
 	wire [REG_WIDTH-1:0] muxrf_to_rf_datain, rf_areg_to_muxa_muximm_mem_datain,
 								rf_breg_to_muxb_muxpc_muxrf, rf_areg_aluimmz_to_muxrf;
+								
+	// // ALU Unit \\ \\
+	
+	mux2 muxA(
+		.select(), // Needs a wire...
+		.dataA(rf_areg_to_muxa_muximm_mem_datain),
+		.dataB(pc_to_muxa_muxmem),
+		.dataOut(muxa_data_to_alua)
+	);
+	
+	mux4 muxB(
+		.select(), // Needs a wire...
+		.dataA(rf_breg_to_muxb_muxpc_muxrf),
+		.dataB(alu_imml_to_muxb_muxrfimm),
+		.dataC(alu_imma_to_muxb),
+		.dataD(16'b0000000000000001),
+		.dataOut(muxb_data_to_alub)
+	);
+	
+	mux2 #(4) mux_op_alu(
+		.select(), // Needs a wire...
+		.dataA(instr_ir_op_imm_to_muxopalu_sign),
+		.dataB(instr_ir_op_to_muxopalu),
+		.dataOut(instr_aluopmux_to_alucontrol)
+	);
+	
+	alu_control alu_controller(
+		.op_code(instr_aluopmux_to_alucontrol),
+		.instr_type(), // Needs a wire...
+		.control_word(alucontrol_op_to_alu),
+		.carry_bit(alucontrol_cin_to_alu)
+	);
+	
+	alu alu(
+		.A(muxa_data_to_alua),
+		.B(muxb_data_to_alub),
+		.control_word(alucontrol_op_to_alu),
+		.carry_in(alucontrol_cin_to_alu),
+		.result(alu_result_to_muxrf_muxpc),
+		.carry_out(alu_flag_to_fsm[0]),
+		.low_out(alu_flag_to_fsm[1]),
+		.over_out(alu_flag_to_fsm[2]),
+		.neg_out(alu_flag_to_fsm[3]),
+		.zero_out(alu_flag_to_fsm[4])
+	);
 	
 endmodule
