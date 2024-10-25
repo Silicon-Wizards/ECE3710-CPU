@@ -23,7 +23,7 @@ module memFSM #(
 	input nextStateButton,
 	
 	output portLED,				// port LED turns off at portA, turns on at portB
-	output RWLED,					// Read/Write LED turns off at Read state, turns on at Write state
+	output reg RWLED,				// Read/Write LED turns off at Read state, turns on at Write state
 	output [3:0] addressLED,
 	output [6:0] readDataSeg1, readDataSeg2, writeDataSeg1, writeDataSeg2
 );
@@ -94,7 +94,8 @@ module memFSM #(
 				data_b <= inputData;
 				writeData <= data_b;
 			end
-		end 
+		end
+		RWLED <= currentStatus;
 	end
 	
 	hexTo7Seg2 sevenSegConverter1(readData, readDataSeg1, readDataSeg2);
